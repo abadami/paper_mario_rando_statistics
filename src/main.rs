@@ -1,25 +1,43 @@
 use scraper::{Html, Selector};
 
+fn get_race_titles_for_page_number(
+    page_number: u32,
+) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+    let mut titles = Vec::<String>::new();
+
+    let mut base_url = "https://racetime.gg/pm64r?page=".to_string();
+
+    base_url.push_str(&page_number.to_string());
+
+    let response = reqwest::blocking::get(base_url)?.text()?;
+
+    let document = Html::parse_document(&response);
+    let selector = Selector::parse("span.slug")?;
+
+    for element in document.select(&selector) {
+        let race_title = element.text().collect::<String>();
+
+        titles.push(race_title);
+    }
+
+    Ok(titles)
+}
+
 //TODO: Figure out how to parse the top times from a detail page (use: https://racetime.gg/pm64r/kind-tastytonic-9752)
 //TODO: Figure out how to parse page number
 //TODO: Figure out how to traverse each page
 //TODO: Figure out how to fetch each detail page
 //TODO: Figure out STATISTICS
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let response = reqwest::blocking::get("https://racetime.gg/pm64r")?.text()?;
+    let race_titles = get_race_titles_for_page_number(1)?;
 
-    let document = Html::parse_document(&response);
-    let selector = Selector::parse("span.slug").unwrap();
-
-    let race_title_element = document.select(&selector).next().unwrap();
-
-    let race_title = race_title_element.text().collect::<String>();
+    let race_title = &race_titles[0];
 
     println!("Race Title: {}", race_title);
 
     let mut race_details_url: String = "https://racetime.gg/pm64r/".to_string();
 
-    race_details_url.push_str(&race_title);
+    race_details_url.push_str(race_title);
 
     let details_response = reqwest::blocking::get(race_details_url)?.text()?;
 
