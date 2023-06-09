@@ -88,6 +88,9 @@ fn convert_seconds_to_time(seconds: usize) -> String {
 
 //TODO: PERFORMANCE
 //TODO: Filter races based on number of participants
+//TODO: Convert to API?
+//TODO: Multithreads?
+//TODO: API fetches "latest" result, with results calculated every {time period}
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut races = HashMap::<String, usize>::new();
 
