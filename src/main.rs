@@ -37,7 +37,9 @@ fn get_fatest_time_for_race(title: String) -> Result<usize, Box<dyn std::error::
 
     let finish_time = finish_time_node.text().collect::<String>();
 
-    Ok(0)
+    let finish_time_in_seconds = convert_time_to_seconds(finish_time);
+
+    Ok(finish_time_in_seconds)
 }
 
 fn convert_time_to_seconds(time: String) -> usize {
@@ -103,28 +105,37 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         current_length = races.len();
     }
 
-    let race_title = races.iter().next().unwrap().0;
+    for (key, value) in races.iter_mut() {
+        let seconds = get_fatest_time_for_race(key.to_string())?;
 
-    println!("Race Title: {}", race_title);
-    println!("Races Length: {}", races.len());
+        *value = seconds;
+    }
 
-    let mut race_details_url: String = "https://racetime.gg/pm64r/".to_string();
+    let total_seconds: usize = races.values().sum();
 
-    race_details_url.push_str(race_title);
+    let average = total_seconds / races.len();
 
-    let details_response = reqwest::blocking::get(race_details_url)?.text()?;
+    let mut deviations: Vec<usize> = Vec::new();
 
-    let details_document = Html::parse_document(&details_response);
-    let finish_time_selector = Selector::parse("time.finish-time").unwrap();
+    for value in races.values() {
+        let deviation = if average > *value {
+            (average - value) ^ 2
+        } else {
+            (value - average) ^ 2
+        };
 
-    let finish_time_node = details_document
-        .select(&finish_time_selector)
-        .next()
-        .unwrap();
+        deviations.push(deviation);
+    }
 
-    let finish_time = finish_time_node.text().collect::<String>();
+    let deviation_sum: usize = deviations.iter().sum();
 
-    println!("Finish Time: {}", finish_time);
+    let standard_deviation_in_seconds = deviation_sum / races.len();
+
+    let average_time = convert_seconds_to_time(average);
+    let standard_deviation = convert_seconds_to_time(standard_deviation_in_seconds);
+
+    println!("Average Time: {}", average_time);
+    println!("Standard Deviation: {}", standard_deviation);
 
     Ok(())
 }
