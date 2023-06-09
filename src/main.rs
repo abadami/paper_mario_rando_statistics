@@ -91,6 +91,7 @@ fn convert_seconds_to_time(seconds: usize) -> String {
 //TODO: Convert to API?
 //TODO: Multithreads?
 //TODO: API fetches "latest" result, with results calculated every {time period}
+//TODO: Modulize it a little bit
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut races = HashMap::<String, usize>::new();
 
