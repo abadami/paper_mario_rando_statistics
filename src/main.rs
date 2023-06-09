@@ -86,9 +86,8 @@ fn convert_seconds_to_time(seconds: usize) -> String {
     time
 }
 
-//TODO: Figure out how to traverse each page
-//TODO: Figure out how to fetch each detail page
-//TODO: Figure out STATISTICS
+//TODO: PERFORMANCE
+//TODO: Filter races based on number of participants
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut races = HashMap::<String, usize>::new();
 
