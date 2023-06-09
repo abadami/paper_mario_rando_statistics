@@ -1,10 +1,10 @@
 use scraper::{Html, Selector};
+use std::collections::HashMap;
 
 fn get_race_titles_for_page_number(
+    races: &mut HashMap<String, usize>,
     page_number: u32,
-) -> Result<Vec<String>, Box<dyn std::error::Error>> {
-    let mut titles = Vec::<String>::new();
-
+) -> Result<(), Box<dyn std::error::Error>> {
     let mut base_url = "https://racetime.gg/pm64r?page=".to_string();
 
     base_url.push_str(&page_number.to_string());
@@ -17,21 +17,22 @@ fn get_race_titles_for_page_number(
     for element in document.select(&selector) {
         let race_title = element.text().collect::<String>();
 
-        titles.push(race_title);
+        races.insert(race_title, 0);
     }
 
-    Ok(titles)
+    Ok(())
 }
 
-//TODO: Figure out how to parse the top times from a detail page (use: https://racetime.gg/pm64r/kind-tastytonic-9752)
 //TODO: Figure out how to parse page number
 //TODO: Figure out how to traverse each page
 //TODO: Figure out how to fetch each detail page
 //TODO: Figure out STATISTICS
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let race_titles = get_race_titles_for_page_number(1)?;
+    let mut races = HashMap::<String, usize>::new();
 
-    let race_title = &race_titles[0];
+    get_race_titles_for_page_number(&mut races, 1)?;
+
+    let race_title = races.iter().next().unwrap().0;
 
     println!("Race Title: {}", race_title);
 
