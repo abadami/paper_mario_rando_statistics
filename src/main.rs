@@ -1,7 +1,9 @@
+use reqwest::Client;
 use scraper::{Html, Selector};
 use std::collections::HashMap;
 
-fn get_race_titles_for_page_number(
+async fn get_race_titles_for_page_number(
+    client: &Client,
     races: &mut HashMap<String, usize>,
     page_number: u32,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -9,7 +11,7 @@ fn get_race_titles_for_page_number(
 
     base_url.push_str(&page_number.to_string());
 
-    let response = reqwest::blocking::get(base_url)?.text()?;
+    let response = client.get(base_url).send().await?.text().await?;
 
     let document = Html::parse_document(&response);
     let selector = Selector::parse("span.slug")?;
@@ -23,12 +25,15 @@ fn get_race_titles_for_page_number(
     Ok(())
 }
 
-fn get_fatest_time_for_race(title: String) -> Result<usize, Box<dyn std::error::Error>> {
+async fn get_fatest_time_for_race(
+    client: &Client,
+    title: String,
+) -> Result<usize, Box<dyn std::error::Error>> {
     let mut base_url = "https://racetime.gg/pm64r/".to_string();
 
     base_url.push_str(&title);
 
-    let response = reqwest::blocking::get(base_url)?.text()?;
+    let response = client.get(base_url).send().await?.text().await?;
 
     let document = Html::parse_document(&response);
     let selector = Selector::parse("time.finish-time")?;
@@ -92,24 +97,31 @@ fn convert_seconds_to_time(seconds: usize) -> String {
 //TODO: Multithreads?
 //TODO: API fetches "latest" result, with results calculated every {time period}
 //TODO: Modulize it a little bit
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut races = HashMap::<String, usize>::new();
 
     let mut previous_length = 0;
     let mut current_length = 1;
     let mut counter = 1;
 
+    let client = reqwest::Client::new();
+
     while current_length > previous_length {
         previous_length = current_length;
 
-        get_race_titles_for_page_number(&mut races, counter)?;
+        get_race_titles_for_page_number(&client, &mut races, counter).await?;
+
+        println!("Current Iteration: {}", counter);
 
         counter += 1;
         current_length = races.len();
     }
 
     for (key, value) in races.iter_mut() {
-        let seconds = get_fatest_time_for_race(key.to_string())?;
+        let seconds = get_fatest_time_for_race(&client, key.to_string()).await?;
+
+        println!("Getting fastest time for race {}", key);
 
         *value = seconds;
     }
