@@ -2,6 +2,10 @@ use reqwest::Client;
 use scraper::{Html, Selector};
 use std::collections::HashMap;
 
+mod utils;
+
+use utils::{convert_seconds_to_time, convert_time_to_seconds};
+
 async fn get_race_titles_for_page_number(
     client: &Client,
     races: &mut HashMap<String, usize>,
@@ -59,56 +63,9 @@ async fn get_fatest_time_for_race(
     Ok(finish_time_in_seconds)
 }
 
-fn convert_time_to_seconds(time: String) -> usize {
-    let mut total_time = 0;
-
-    let time_split = time.split(':');
-
-    let mut multiplier = 3600;
-
-    for time in time_split {
-        let parsed_time = time.parse::<usize>();
-
-        let converted_seconds = match parsed_time {
-            Ok(val) => val * multiplier,
-            _ => 0,
-        };
-
-        total_time += converted_seconds;
-        multiplier /= 60;
-    }
-
-    total_time
-}
-
-fn convert_seconds_to_time(seconds: usize) -> String {
-    let mut time: String = String::new();
-
-    let mut seconds_tracker = seconds;
-
-    let hours = seconds_tracker / 3600;
-
-    seconds_tracker -= hours * 3600;
-
-    let minutes = seconds_tracker / 60;
-
-    seconds_tracker -= minutes * 60;
-
-    time.push_str(&hours.to_string());
-    time.push(':');
-    time.push_str(&minutes.to_string());
-    time.push(':');
-    time.push_str(&seconds_tracker.to_string());
-
-    time
-}
-
-//TODO: Filter races based on number of participants
-//TODO: Convert to API?
-//TODO: Multithreads?
-//TODO: API fetches "latest" result, with results calculated every {time period}
 //TODO: Modulize it a little bit
-//TODO: performance
+//TODO: Cache results.
+//TODO: Results will need to be fetched either periodically or on request. Ideally, we could do this periodically, but on request will probably be easiest. I think the web client will just fetch all data at start and use it.
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut races = HashMap::<String, usize>::new();
