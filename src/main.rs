@@ -6,7 +6,6 @@ mod utils;
 use api::{get_fatest_time_for_race, get_race_titles_for_page_number};
 use utils::convert_seconds_to_time;
 
-//TODO: Modulize it a little bit
 //TODO: Cache results.
 //TODO: Results will need to be fetched either periodically or on request. Ideally, we could do this periodically, but on request will probably be easiest. I think the web client will just fetch all data at start and use it.
 #[tokio::main]
