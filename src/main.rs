@@ -7,7 +7,8 @@ use api::{get_fatest_time_for_race, get_race_titles_for_page_number};
 use utils::convert_seconds_to_time;
 
 //TODO: Cache results.
-//TODO: Results will need to be fetched either periodically or on request. Ideally, we could do this periodically, but on request will probably be easiest. I think the web client will just fetch all data at start and use it.
+//TODO: API Conversion
+//TODO: Maybe use a DB? Take a look at SurrealDB?
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut races = HashMap::<String, usize>::new();
