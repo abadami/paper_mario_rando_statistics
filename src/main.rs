@@ -1,9 +1,10 @@
 use std::collections::HashMap;
 
 mod api;
+mod data;
 mod utils;
 
-use api::{get_fatest_time_for_race, get_race_titles_for_page_number};
+use api::{get_fatest_time_for_race_by_scraping, get_race_titles_for_page_number_by_scrapping};
 use utils::convert_seconds_to_time;
 
 //TODO: Cache results.
@@ -22,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     while current_length > previous_length {
         previous_length = current_length;
 
-        get_race_titles_for_page_number(&client, &mut races, counter).await?;
+        get_race_titles_for_page_number_by_scrapping(&client, &mut races, counter).await?;
 
         println!("Current Iteration: {}", counter);
 
@@ -31,7 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     for (key, value) in races.iter_mut() {
-        let seconds = get_fatest_time_for_race(&client, key.to_string(), 0).await?;
+        let seconds = get_fatest_time_for_race_by_scraping(&client, key.to_string(), 0).await?;
 
         println!("Getting fastest time for race {}", key);
 

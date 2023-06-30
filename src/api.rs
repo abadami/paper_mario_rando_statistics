@@ -4,7 +4,7 @@ use std::collections::HashMap;
 
 use super::utils::convert_time_to_seconds;
 
-pub async fn get_race_titles_for_page_number(
+pub async fn get_race_titles_for_page_number_by_scrapping(
     client: &Client,
     races: &mut HashMap<String, usize>,
     page_number: u32,
@@ -27,7 +27,7 @@ pub async fn get_race_titles_for_page_number(
     Ok(())
 }
 
-pub async fn get_fatest_time_for_race(
+pub async fn get_fatest_time_for_race_by_scraping(
     client: &Client,
     title: String,
     participate_limit: u8,
@@ -59,4 +59,20 @@ pub async fn get_fatest_time_for_race(
     let finish_time_in_seconds = convert_time_to_seconds(finish_time);
 
     Ok(finish_time_in_seconds)
+}
+
+pub async fn get_race_titles_and_entrants_by_page_number(
+    client: &Client,
+    races: &mut HashMap<String, usize>,
+    page_number: u32,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let mut base_url = "https://racetime.gg/pm64r/races/data?page=".to_string();
+
+    base_url.push_str(&page_number.to_string());
+
+    let response: HashMap<String, String> = client.get(base_url).send().await?.json().await?;
+
+    //TODO: Finish this shit out
+
+    Ok(())
 }
