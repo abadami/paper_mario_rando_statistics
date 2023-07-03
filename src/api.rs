@@ -2,7 +2,9 @@ use reqwest::Client;
 use scraper::{Html, Selector};
 use std::collections::HashMap;
 
-use super::utils::convert_time_to_seconds;
+use crate::data::{Race, RaceByPageResponse};
+
+use crate::utils::convert_time_to_seconds;
 
 pub async fn get_race_titles_for_page_number_by_scrapping(
     client: &Client,
@@ -70,9 +72,13 @@ pub async fn get_race_titles_and_entrants_by_page_number(
 
     base_url.push_str(&page_number.to_string());
 
-    let response: HashMap<String, String> = client.get(base_url).send().await?.json().await?;
+    let response: String = client.get(base_url).send().await?.text().await?;
 
-    //TODO: Finish this shit out
+    let races_response_data: RaceByPageResponse = serde_json::from_str(&response)?;
+
+    for race in races_response_data.races {
+        races.insert(race.name, 0);
+    }
 
     Ok(())
 }
