@@ -1,8 +1,9 @@
 use reqwest::Client;
 use scraper::{Html, Selector};
 use std::collections::HashMap;
+use std::convert;
 
-use crate::data::{Race, RaceByPageResponse};
+use crate::data::{Race, RaceByPageResponse, RaceDetail};
 
 use crate::utils::convert_time_to_seconds;
 
@@ -81,4 +82,31 @@ pub async fn get_race_titles_and_entrants_by_page_number(
     }
 
     Ok(())
+}
+
+pub async fn get_fastest_time_for_race(
+    client: &Client,
+    title: String,
+    participate_limit: u8,
+) -> Result<usize, Box<dyn std::error::Error>> {
+    let mut base_url = "https://racetime.gg/".to_string();
+
+    base_url.push_str(&title);
+    base_url.push_str("/data");
+
+    let response: String = client.get(base_url).send().await?.text().await?;
+
+    let response_data: RaceDetail = serde_json::from_str(&response)?;
+
+    if response_data.entrants_count < participate_limit.into() {
+        println!("Less than limit");
+        return Ok(0);
+    }
+
+    let first_entrant = response_data.entrants.first().unwrap();
+
+    match &first_entrant.finish_time {
+        Some(val) => Ok(convert_time_to_seconds(val.to_string())),
+        None => Ok(0),
+    }
 }

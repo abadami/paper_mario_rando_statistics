@@ -1,3 +1,4 @@
+//TODO: Handle ISO Duration
 pub fn convert_time_to_seconds(time: String) -> usize {
     let mut total_time = 0;
 

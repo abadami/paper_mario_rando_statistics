@@ -49,8 +49,8 @@ pub struct Entrant {
     pub user: User,
     pub status: EntrantStatus,
     pub finish_time: Option<String>,
-    pub place: u32,
-    pub place_ordinal: String,
+    pub place: Option<u32>,
+    pub place_ordinal: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
