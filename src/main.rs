@@ -2,10 +2,13 @@ use std::collections::HashMap;
 
 mod api;
 mod data;
+mod duration;
 mod utils;
 
 use api::{get_fastest_time_for_race, get_race_titles_and_entrants_by_page_number};
 use utils::convert_seconds_to_time;
+
+//TODO: TOP PRIORITY - MAKE OWN DURATION TO HANDLE THIS NONSENSE
 
 //TODO: Cache results.
 //TODO: API Conversion
