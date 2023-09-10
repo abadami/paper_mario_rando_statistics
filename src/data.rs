@@ -87,3 +87,10 @@ pub struct RaceDetail {
     pub time_limit: String,
     pub entrants: Vec<Entrant>,
 }
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct StatisticResponse {
+    pub average: String,
+    pub deviation: String,
+    pub race_number: usize
+}
