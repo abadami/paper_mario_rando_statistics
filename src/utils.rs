@@ -1,3 +1,7 @@
+use std::collections::HashMap;
+
+use crate::data::StatisticResponse;
+
 //TODO: Handle ISO Duration
 pub fn convert_time_to_seconds(time: String) -> usize {
     let mut total_time = 0;
@@ -41,4 +45,39 @@ pub fn convert_seconds_to_time(seconds: usize) -> String {
     time.push_str(&seconds_tracker.to_string());
 
     time
+}
+
+fn get_average(races: &HashMap<String, usize>) -> usize {
+    let total_seconds: usize = races.values().filter(|value| value > &&0).sum();
+
+    let average = total_seconds / races.values().filter(|value| value > &&0).count();
+
+    average
+}
+
+pub fn calculate_statistics(races: &HashMap<String, usize>) -> StatisticResponse {
+    let mut deviations: Vec<usize> = Vec::new();
+
+    let average = get_average(races);
+
+    for value in races.values() {
+        if value == &0 {
+            continue;
+        }
+
+        let deviation = if average > *value {
+            (average - value) ^ 2
+        } else {
+            (value - average) ^ 2
+        };
+
+        deviations.push(deviation);
+    }
+
+    let deviation_sum: usize = deviations.iter().sum();
+    let deviation_length = deviations.len();
+
+    let standard_deviation_in_seconds = deviation_sum / deviation_length;
+
+    StatisticResponse { average: convert_seconds_to_time(average), deviation: convert_seconds_to_time(standard_deviation_in_seconds), race_number: deviation_length }
 }

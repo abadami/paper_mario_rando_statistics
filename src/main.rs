@@ -7,13 +7,13 @@ mod utils;
 mod route;
 
 use api::{get_fastest_time_for_race, get_race_titles_and_entrants_by_page_number, FilterData};
-use data::StatisticResponse;
+use data::{StatisticResponse, StatisticRequest};
 use reqwest::Client;
-use utils::convert_seconds_to_time;
+use utils::{convert_seconds_to_time, calculate_statistics};
 
 type AliasedResult<T> = Result<T, Box<dyn std::error::Error>>;
 
-async fn get_races(client: &Client) -> AliasedResult<HashMap<String, usize>> {
+async fn get_races(client: &Client, request: StatisticRequest) -> AliasedResult<HashMap<String, usize>> {
     let mut races: HashMap<String, usize> = HashMap::<String, usize>::new();
 
     let mut previous_length = 0;
@@ -38,18 +38,12 @@ async fn get_race_times(client: &Client, race: String, times: u8) -> Vec<usize> 
     todo!()
 }
 
-async fn get_average() -> usize {
-    0
-}
 
-async fn get_deviation() -> usize {
-    0
-}
 
-async fn get_statistics(filter_data: FilterData) -> AliasedResult<StatisticResponse> {
+async fn get_statistics(filter_data: StatisticRequest) -> AliasedResult<StatisticResponse> {
     let client = reqwest::Client::new();
 
-    let mut races = get_races(&client).await?;
+    let mut races = get_races(&client, filter_data).await?;
 
     for (key, value) in races.iter_mut() {
         println!("Getting fastest time for race {}", key);
@@ -61,39 +55,9 @@ async fn get_statistics(filter_data: FilterData) -> AliasedResult<StatisticRespo
         *value = seconds;
     }
 
-    let total_seconds: usize = races.values().filter(|value| value > &&0).sum();
+    let response = calculate_statistics(&races);
 
-    let average = total_seconds / races.values().filter(|value| value > &&0).count();
-
-    let mut deviations: Vec<usize> = Vec::new();
-
-    for value in races.values() {
-        if value == &0 {
-            continue;
-        }
-
-        let deviation = if average > *value {
-            (average - value) ^ 2
-        } else {
-            (value - average) ^ 2
-        };
-
-        deviations.push(deviation);
-    }
-
-    let deviation_sum: usize = deviations.iter().sum();
-    let deviation_length = deviations.len();
-
-    let standard_deviation_in_seconds = deviation_sum / deviation_length;
-
-    let average_time = convert_seconds_to_time(average);
-    let standard_deviation = convert_seconds_to_time(standard_deviation_in_seconds);
-
-    Ok(StatisticResponse {
-        average: average_time,
-        deviation: standard_deviation,
-        race_number: deviation_length
-    })
+    Ok(response)
 
 
 }
@@ -103,7 +67,7 @@ async fn get_statistics(filter_data: FilterData) -> AliasedResult<StatisticRespo
 //TODO: Maybe use a DB? Take a look at SurrealDB?
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let race_statistics = get_statistics(FilterData { participant_limit: None, before_time: None, after_time: None, contains_entrant: None, page_number: 1 }).await?;
+    let race_statistics = get_statistics(StatisticRequest { participant_limit: None, before_time: None, after_time: None, contains_entrant: None }).await?;
 
     println!("Races Considered: {}", race_statistics.race_number);
     println!("Average Time: {}", race_statistics.average);

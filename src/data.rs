@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 //Data definitions
@@ -86,6 +87,14 @@ pub struct RaceDetail {
     pub started_at: String,
     pub time_limit: String,
     pub entrants: Vec<Entrant>,
+}
+
+#[derive(Debug, Clone)]
+pub struct StatisticRequest {
+    pub participant_limit: Option<u8>,
+    pub before_time: Option<DateTime<Utc>>,
+    pub after_time: Option<DateTime<Utc>>,
+    pub contains_entrant: Option<String>
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
