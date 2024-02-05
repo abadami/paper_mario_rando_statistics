@@ -38,8 +38,6 @@ async fn get_race_times(client: &Client, race: String, times: u8) -> Vec<usize> 
     todo!()
 }
 
-
-
 async fn get_statistics(filter_data: StatisticRequest) -> AliasedResult<StatisticResponse> {
     let client = reqwest::Client::new();
 
