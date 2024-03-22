@@ -18,7 +18,7 @@ pub async fn get_race_titles_and_entrants_by_page_number(
     races: &mut HashMap<String, usize>,
     page_number: u32,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let mut base_url = "https://racetime.gg/pm64r/races/data?page=".to_string();
+    let mut base_url = "https://racetime.gg/pm64r/races/data?show_entrants=1&page=".to_string();
 
     base_url.push_str(&page_number.to_string());
 
