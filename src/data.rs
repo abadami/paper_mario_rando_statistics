@@ -98,6 +98,15 @@ pub struct StatisticRequest {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct StatisticsRequest {
+    pub participant_limit: Option<u8>,
+    pub before_time: Option<usize>,
+    pub after_time: Option<usize>,
+    pub contains_entrant: Option<String>,
+    pub page_number: u32,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct StatisticResponse {
     pub average: String,
     pub deviation: String,

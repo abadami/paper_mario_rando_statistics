@@ -58,6 +58,10 @@ fn get_average(races: &HashMap<String, usize>) -> usize {
 pub fn calculate_statistics(races: &HashMap<String, usize>) -> StatisticResponse {
     let mut deviations: Vec<usize> = Vec::new();
 
+    if races.values().filter(|value| value > &&0).count() == 0 {
+        return StatisticResponse { average: "00:00:00".to_string(), deviation: "00:00:00".to_string(), race_number: 0 }
+    }
+
     let average = get_average(races);
 
     for value in races.values() {
@@ -76,6 +80,10 @@ pub fn calculate_statistics(races: &HashMap<String, usize>) -> StatisticResponse
 
     let deviation_sum: usize = deviations.iter().sum();
     let deviation_length = deviations.len();
+
+    if deviation_length == 0 {
+        return StatisticResponse { average: "00:00:00".to_string(), deviation: "00:00:00".to_string(), race_number: 0 }
+    }
 
     let standard_deviation_in_seconds = deviation_sum / deviation_length;
 

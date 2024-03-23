@@ -1,3 +1,4 @@
+use axum::http::StatusCode;
 use chrono::{DateTime, ParseError, Utc};
 use reqwest::Client;
 use std::collections::HashMap;
@@ -59,22 +60,39 @@ pub async fn get_fastest_time_for_race(
     client: &Client,
     title: String,
     participate_limit: u8,
-) -> Result<usize, Box<dyn std::error::Error>> {
+) -> Result<usize, StatusCode> {
     let mut base_url = "https://racetime.gg/".to_string();
 
     base_url.push_str(&title);
     base_url.push_str("/data");
 
-    let response: String = client.get(base_url).send().await?.text().await?;
+    let request = client.get(base_url).send().await;
 
-    let response_data: RaceDetail = serde_json::from_str(&response)?;
+    let request_data = match request {
+        Ok(val) => val,
+        Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR)
+    };
 
-    if response_data.entrants_count < participate_limit.into() {
+    let response = request_data.text().await;
+
+    let response_data = match response {
+        Ok(val) => val,
+        Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR)
+    };
+
+    let json_request = serde_json::from_str(&response_data);
+
+    let json_data: RaceDetail = match json_request {
+        Ok(val) => val,
+        Err(_) => return Err(StatusCode::INTERNAL_SERVER_ERROR)
+    };
+
+    if json_data.entrants_count < participate_limit.into() {
         println!("Less than limit");
         return Ok(0);
     }
 
-    let first_entrant = response_data.entrants.first().unwrap();
+    let first_entrant = json_data.entrants.first().unwrap();
 
     let duration_string = match &first_entrant.finish_time {
         Some(val) => val.to_string(),

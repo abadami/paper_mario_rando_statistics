@@ -6,10 +6,11 @@ mod duration;
 mod utils;
 mod route;
 
-use api::{get_fastest_time_for_race, get_race_titles_and_entrants_by_page_number, FilterData};
-use data::{StatisticResponse, StatisticRequest};
+use api::get_race_titles_and_entrants_by_page_number;
+use axum::{Router, routing::get};
+use data::StatisticRequest;
 use reqwest::Client;
-use utils::{convert_seconds_to_time, calculate_statistics};
+use route::get_statistics_with_filters;
 
 type AliasedResult<T> = Result<T, Box<dyn std::error::Error>>;
 
@@ -38,38 +39,37 @@ async fn get_race_times(client: &Client, race: String, times: u8) -> Vec<usize> 
     todo!()
 }
 
-async fn get_statistics(filter_data: StatisticRequest) -> AliasedResult<StatisticResponse> {
-    let client = reqwest::Client::new();
+// async fn get_statistics(filter_data: StatisticRequest) -> AliasedResult<StatisticResponse> {
+//     let client = reqwest::Client::new();
 
-    let mut races = get_races(&client, filter_data).await?;
+//     let mut races = get_races(&client, filter_data).await?;
 
-    for (key, value) in races.iter_mut() {
-        println!("Getting fastest time for race {}", key);
+//     for (key, value) in races.iter_mut() {
+//         println!("Getting fastest time for race {}", key);
 
-        let seconds = get_fastest_time_for_race(&client, key.to_string(), 0).await?;
+//         let seconds = get_fastest_time_for_race(&client, key.to_string(), 0).await;
 
-        println!("Fastest time is {}", seconds);
+//         println!("Fastest time is {}", seconds);
 
-        *value = seconds;
-    }
+//         *value = seconds;
+//     }
 
-    let response = calculate_statistics(&races);
+//     let response = calculate_statistics(&races);
 
-    Ok(response)
+//     Ok(response)
 
 
-}
+// }
 
 //TODO: Cache results.
 //TODO: API Conversion
 //TODO: Maybe use a DB? Take a look at SurrealDB?
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let race_statistics = get_statistics(StatisticRequest { participant_limit: None, before_time: None, after_time: None, contains_entrant: None }).await?;
+async fn main() {
+    //build application
+    let app = Router::new().route("/", get(get_statistics_with_filters));
 
-    println!("Races Considered: {}", race_statistics.race_number);
-    println!("Average Time: {}", race_statistics.average);
-    println!("Standard Deviation: {}", race_statistics.deviation);
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    axum::serve(listener, app).await.unwrap()
 
-    Ok(())
 }
