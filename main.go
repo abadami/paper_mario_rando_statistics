@@ -61,10 +61,12 @@ func main() {
 	}
 
 	racewg.Wait()
-	//var sum = 0
+	var sum = 0.0
 
 	for raceDetail := range results {
 		fmt.Println(raceDetail.Name, " ", raceDetail.Entrants[0].FinishTime)
-		//sum += raceDetail.Entrants[0].FinishTime
+		sum += ParseTimeString(raceDetail.Entrants[0].FinishTime)
 	}
+
+	fmt.Println(sum)
 }
