@@ -1,0 +1,11 @@
+C:\src\paper_mario_rando_statistics\target\debug\deps\futures_channel-a67ba39a59d955da.rmeta: C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\lib.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\lock.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\mpsc\mod.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\mpsc\queue.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\oneshot.rs
+
+C:\src\paper_mario_rando_statistics\target\debug\deps\libfutures_channel-a67ba39a59d955da.rlib: C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\lib.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\lock.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\mpsc\mod.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\mpsc\queue.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\oneshot.rs
+
+C:\src\paper_mario_rando_statistics\target\debug\deps\futures_channel-a67ba39a59d955da.d: C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\lib.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\lock.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\mpsc\mod.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\mpsc\queue.rs C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\oneshot.rs
+
+C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\lib.rs:
+C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\lock.rs:
+C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\mpsc\mod.rs:
+C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\mpsc\queue.rs:
+C:\Users\andre\.cargo\registry\src\github.com-1ecc6299db9ec823\futures-channel-0.3.28\src\oneshot.rs:
