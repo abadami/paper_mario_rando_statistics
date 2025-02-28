@@ -14,6 +14,8 @@
           'Elixir.PaperMarioRandoStatisticsWeb.PageController',
           'Elixir.PaperMarioRandoStatisticsWeb.PageHTML',
           'Elixir.PaperMarioRandoStatisticsWeb.Router',
+          'Elixir.PaperMarioRandoStatisticsWeb.StatisticsController',
+          'Elixir.PaperMarioRandoStatisticsWeb.StatisticsHTML',
           'Elixir.PaperMarioRandoStatisticsWeb.Telemetry']},
      {compile_env,
          [{paper_mario_rando_statistics,
