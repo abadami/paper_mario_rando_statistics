@@ -78,22 +78,22 @@ type RaceDetail struct {
 }
 
 type StatisticRequest struct {
-	participantLimit int
-	beforeTime       string
-	afterTime        string
-	containsEntrant  string
+	ParticipantLimit int
+	BeforeTime       string
+	AfterTime        string
+	ContainsEntrant  string
 }
 
 type StatisticsRequest struct {
-	participantLimit int
-	beforeTime       string
-	afterTime        string
-	containsEntrant  string
-	pageNumber       int
+	ParticipantLimit int
+	BeforeTime       string
+	AfterTime        string
+	ContainsEntrant  string
+	PageNumber       int
 }
 
 type StatisticsResponse struct {
-	average    string
-	deviation  string
-	raceNumber int
+	Average    string
+	Deviation  string
+	RaceNumber int
 }

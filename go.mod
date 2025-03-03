@@ -1,4 +1,4 @@
-module randomizer-stats.com/main
+module github.com/abadami/randomizer-statistics
 
 go 1.23.4
 
