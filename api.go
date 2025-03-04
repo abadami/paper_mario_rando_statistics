@@ -8,7 +8,7 @@ import (
 )
 
 func GetRaceTitlesAndEntrantsByPage(pageNum int) RaceByPageResponse {
-	url := fmt.Sprintf("https://racetime.gg/pm64r/races/data?show_entrants=1&page=%d", pageNum)
+	url := fmt.Sprintf("https://racetime.gg/pm64r/races/data?show_entrants=1&page=%d&per_page=100", pageNum)
 
 	resp, err := http.Get(url)
 

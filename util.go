@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"regexp"
 
 	"github.com/senseyeio/duration"
@@ -34,4 +35,17 @@ func ParseSecondsToTime(seconds int) string {
 	seconds_tracker -= minutes * 60
 
 	return fmt.Sprintf("%d:%d:%d", hours, minutes, seconds_tracker)
+}
+
+func CalculateDeviation(times []int, average int, count int) float64 {
+	deviationSum := 0.0
+
+	for _, seconds := range times {
+		deviationSum += math.Pow(float64(seconds - average), 2)
+		println(deviationSum)
+	}
+
+	deviationAverage := deviationSum / float64(count)
+
+	return math.Sqrt(float64(deviationAverage))
 }
