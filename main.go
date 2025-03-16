@@ -12,7 +12,11 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		response := GetRaceAverageByFilters(StatisticsRequest{})
+		entrant := chi.URLParam(r, "ContainsEntrant")
+
+		response := GetRaceAverageByFilters(StatisticsRequest{
+			ContainsEntrant: entrant,
+		})
 		
 		render.JSON(w, r, response)
 	})

@@ -5,29 +5,6 @@ import (
 	"sync"
 )
 
-func getPageWorker(id int, jobs <-chan int, results chan<- string, pagewg *sync.WaitGroup, racewg *sync.WaitGroup) {
-	for j := range jobs {
-		fmt.Println("getPageWorker", id, "started job", j)
-		response := GetRaceTitlesAndEntrantsByPage(j)
-		for race := range response.Races {
-			fmt.Println("Processing race title ", response.Races[race].Name)
-			racewg.Add(1)
-			results <- response.Races[race].Name
-		}
-		pagewg.Done()
-	}
-}
-
-func getRaceWorker(id int, jobs <-chan string, results chan<- RaceDetail, wg *sync.WaitGroup) {
-	for j := range jobs {
-		fmt.Println("getRaceWorker", id, "started job", j)
-		response := GetRaceDetails(j)
-		fmt.Println("Processed race ", response.Name)
-		results <- response
-		wg.Done()
-	}
-}
-
 func GetRaceAverageByFilters(request StatisticsRequest) StatisticsResponse {
 	racesResponse := GetRaceTitlesAndEntrantsByPage(1)
 
@@ -46,7 +23,13 @@ func GetRaceAverageByFilters(request StatisticsRequest) StatisticsResponse {
 	pagewg.Add(racesResponse.NumPages - 1)
 
 	for w := 0; w <= 10; w++ {
-		go getPageWorker(w, jobs, detailJobs, pagewg, racewg)
+		go GetPageWorker(GetPageWorkerParams{
+			Id: w,
+			Jobs: jobs,
+			Results: detailJobs,
+			Pagewg: pagewg,
+			Racewg: racewg,
+		})
 	}
 
 	for page := 2; page <= racesResponse.NumPages; page++ {
@@ -55,7 +38,12 @@ func GetRaceAverageByFilters(request StatisticsRequest) StatisticsResponse {
 	close(jobs)
 
 	for w := 0; w <= 1000; w++ {
-		go getRaceWorker(w, detailJobs, results, racewg)
+		go GetRaceWorker(GetRaceWorkerParams{
+			Id: w,
+			Jobs: detailJobs,
+			Results: results,
+			Wg: racewg,
+		})
 	}
 
 	pagewg.Wait()
