@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Races (
     category_short_name text,
     url text,
     goal_name text,
-    started_at date,
+    started_at date
 );
 
 CREATE TABLE IF NOT EXISTS Entrants (
