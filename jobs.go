@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"os"
 	"sync"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -10,10 +11,10 @@ import (
 
 func FetchRaceDetailsFromRacetime() {
 	fmt.Println("Fetching race details from racetime...")
-	//TODO: Replace with environment variable
-	urlExample := "postgres://username:password@localhost:5432/database_name"
 
-	dbpool, err := pgxpool.New(context.Background(), urlExample)
+	url := fmt.Sprintf("postgres://%s:%s@%s:%s/randomizer_stats", os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PWD"), os.Getenv("POSTGRES_URL"), os.Getenv("POSTGRES_PORT"))
+
+	dbpool, err := pgxpool.New(context.Background(), url)
 
 	if err != nil {
 		fmt.Println("Error connecting to database:", err)

@@ -2,16 +2,22 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"github.com/robfig/cron/v3"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	r := chi.NewRouter()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	c := cron.New()
 	c.AddFunc("0 * * * *", func() {
@@ -19,6 +25,8 @@ func main() {
 		FetchRaceDetailsFromRacetime()
 	})
 	c.Start()
+
+	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
