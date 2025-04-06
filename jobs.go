@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"os"
 	"sync"
+	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -60,6 +62,7 @@ func FetchRaceDetailsFromRacetime() {
 			Jobs:    detailJobs,
 			Results: results,
 			Wg:      racewg,
+			dbpool:  dbpool,
 		})
 	}
 
@@ -73,24 +76,17 @@ func FetchRaceDetailsFromRacetime() {
 	//We know we have all the results now, so close the channels
 	close(results)
 
-	sum := 0
-	count := 0
-
-	var times []int
-
-	for raceDetail := range results {
-		fmt.Println(raceDetail.Name, " ", raceDetail.Entrants[0].FinishTime)
-		time := ParseTimeString(raceDetail.Entrants[0].FinishTime)
-		times = append(times, time)
-		sum += time
-		count += 1
+	insertTaskLogArgs := pgx.NamedArgs{
+		"dateRan":      time.Now(),
+		"racesFetched": len(results),
+		"successful":   true,
 	}
 
-	average := sum / count
+	_, taskLogError := dbpool.Exec(context.Background(), `INSERT INTO TaskLog (date_ran, races_fetched, successful) VALUES (@dateRan, @racesFetched, @successful)`, insertTaskLogArgs)
 
-	deviation := CalculateDeviation(times, average, count)
-	fmt.Println("Average time:", average)
-	fmt.Println("Deviation:", deviation)
+	if taskLogError != nil {
+		fmt.Print("Error inserting task log error. Oh no!")
+	}
 
-	fmt.Println("Finished fetching race details")
+	fmt.Print("Finished fetching race data from racetime!")
 }

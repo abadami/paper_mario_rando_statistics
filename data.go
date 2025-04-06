@@ -9,13 +9,13 @@ type RaceByPageResponse struct {
 type RaceStatus struct {
 	Value        string `json:"value"`
 	VerboseValue string `json:"verbose_value"`
-	HelpText     string `json:"help_text"`
+	Helpstring   string `json:"help_string"`
 }
 
 type EntrantStatus struct {
 	Value        string `json:"value"`
 	VerboseValue string `json:"verbose_value"`
-	HelpText     string `json:"help_text"`
+	Helpstring   string `json:"help_string"`
 }
 
 type Category struct {
@@ -96,4 +96,37 @@ type StatisticsResponse struct {
 	Average    string
 	Deviation  string
 	RaceNumber int
+}
+
+type RaceRecord struct {
+	id                  int
+	name                string
+	category_name       string
+	category_short_name string
+	url                 string
+	goal_name           string
+	started_at          string
+}
+
+type EntrantRecord struct {
+	id        int
+	name      string
+	full_name string
+}
+
+type RaceEntrantRecord struct {
+	id            int
+	race_id       int
+	entrant_id    int
+	finish_time   string
+	place         int
+	place_ordinal string
+	status        string
+}
+
+type TaskLogRecord struct {
+	id            int
+	date_ran      string
+	races_fetched int
+	successful    bool
 }
