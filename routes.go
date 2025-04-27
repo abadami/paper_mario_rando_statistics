@@ -5,6 +5,8 @@ import (
 	"sync"
 )
 
+//TODO: Change GetRaceAverageByFilters to use DB
+
 func GetRaceAverageByFilters(request StatisticsRequest) StatisticsResponse {
 	racesResponse := GetRaceTitlesAndEntrantsByPage(1)
 

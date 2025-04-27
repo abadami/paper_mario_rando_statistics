@@ -19,6 +19,15 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	dbpool, err := CreatePool()
+
+	if (err != nil) {
+		fmt.Println("Oh no, failed to connect to db!")
+		return
+	}
+
+	defer dbpool.Close()
+
 	c := cron.New()
 	c.AddFunc("0 * * * *", func() {
 		fmt.Print("Job is running!")

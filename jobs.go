@@ -1,30 +1,15 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"os"
 	"sync"
-	"time"
-
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+//TODO: Fail state for error'd task
+//Essentially, anywhere in the process should error out and no data should be saved if possible
 func FetchRaceDetailsFromRacetime() {
 	fmt.Println("Fetching race details from racetime...")
-
-	url := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=randomizer_stats", os.Getenv("POSTGRES_URL"), os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PWD"), os.Getenv("POSTGRES_PORT"))
-
-	dbpool, err := pgxpool.New(context.Background(), url)
-
-	if err != nil {
-		fmt.Println("Error connecting to database:", err)
-		return
-	}
-
-	defer dbpool.Close()
-
+	
 	racesResponse := GetRaceTitlesAndEntrantsByPage(1)
 
 	jobs := make(chan int, racesResponse.NumPages)
@@ -62,7 +47,6 @@ func FetchRaceDetailsFromRacetime() {
 			Jobs:    detailJobs,
 			Results: results,
 			Wg:      racewg,
-			dbpool:  dbpool,
 		})
 	}
 
@@ -71,22 +55,12 @@ func FetchRaceDetailsFromRacetime() {
 	//We know we have all of the detailJobs, so we can close here
 	close(detailJobs)
 
-	fmt.Println("Finished Page Workgroup")
-
 	racewg.Wait()
-
-	fmt.Println("Finished Race Workgroup")
 
 	//We know we have all the results now, so close the channels
 	close(results)
 
-	insertTaskLogArgs := pgx.NamedArgs{
-		"dateRan":      time.Now().Format(time.RFC3339),
-		"racesFetched": len(results),
-		"successful":   true,
-	}
-
-	_, taskLogError := dbpool.Exec(context.Background(), `INSERT INTO TaskLog (date_ran, races_fetched, successful) VALUES (@dateRan, @racesFetched, @successful)`, insertTaskLogArgs)
+	taskLogError := InsertTaskLog(true, len(results))
 
 	if taskLogError != nil {
 		fmt.Println("Error inserting task log error. Oh no!")

@@ -98,7 +98,7 @@ type StatisticsResponse struct {
 	RaceNumber int
 }
 
-type RaceRecord struct {
+/* type RaceRecord struct {
 	id                  int
 	name                string
 	category_name       string
@@ -129,4 +129,4 @@ type TaskLogRecord struct {
 	date_ran      string
 	races_fetched int
 	successful    bool
-}
+} */

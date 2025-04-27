@@ -1,12 +1,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"sync"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type GetPageWorkerParams struct {
@@ -22,12 +20,10 @@ type GetRaceWorkerParams struct {
 	Jobs    <-chan string
 	Results chan<- RaceDetail
 	Wg      *sync.WaitGroup
-	dbpool  *pgxpool.Pool
 }
 
 func GetPageWorker(params GetPageWorkerParams) {
 	for j := range params.Jobs {
-		fmt.Println("Page: ", j)
 		response := GetRaceTitlesAndEntrantsByPage(j)
 		for race := range response.Races {
 			params.Racewg.Add(1)
@@ -38,47 +34,35 @@ func GetPageWorker(params GetPageWorkerParams) {
 }
 
 func GetRaceWorker(params GetRaceWorkerParams) {
-	for j := range params.Jobs {
-		func () {
-			defer params.Wg.Done()
-
+	for job := range params.Jobs {
 			queryArgs := pgx.NamedArgs{
-				"raceName": j,
+				"raceName": job,
 			}
 	
-			var race string
-			queryError := params.dbpool.QueryRow(context.Background(), `SELECT name FROM Races WHERE name = @raceName`, queryArgs).Scan(&race)
+			_, queryError := GetRaceByName(queryArgs)
 	
 			//TODO: More specific error handling
 			if queryError == nil {
-				fmt.Println("Found Race ", race)
-				return
+				params.Wg.Done()
+				continue
 			}
 
 			if queryError != pgx.ErrNoRows {
 				fmt.Println("Weird Error", queryError)
-			}
-
-			fmt.Println("Did not find race, ", j)
-	
-			response := GetRaceDetails(j)
-	
-			insertArgs := pgx.NamedArgs{
-				"name":              response.Name,
-				"categoryName":      response.Category.Name,
-				"categoryShortName": response.Category.ShortName,
-				"url":               response.Url,
-				"goalName":          response.Goal.Name,
-				"startedAt":         response.StartedAt,
+				params.Wg.Done()
+				continue
 			}
 	
-			_, insertError := params.dbpool.Exec(context.Background(), `INSERT INTO Races (name, category_name, category_short_name, url, goal_name, started_at) VALUES (@name, @categoryName, @categoryShortName, @url, @goalName, @startedAt)`, insertArgs)
+			response := GetRaceDetails(job)
 	
-			if insertError != nil {
-				return
+			insertRaceError := InsertRaceDetails(response)
+	
+			if insertRaceError != nil {
+				params.Wg.Done()
+				continue
 			}
 	
 			params.Results <- response
-		}()
+			params.Wg.Done()
 	}
 }
