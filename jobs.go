@@ -75,10 +75,10 @@ func FetchRaceDetailsFromRacetime() {
 
 	racewg.Wait()
 
+	fmt.Println("Finished Race Workgroup")
+
 	//We know we have all the results now, so close the channels
 	close(results)
-
-	fmt.Println("Finished Race Workgroup")
 
 	insertTaskLogArgs := pgx.NamedArgs{
 		"dateRan":      time.Now().Format(time.RFC3339),
