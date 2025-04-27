@@ -14,7 +14,7 @@ import (
 func FetchRaceDetailsFromRacetime() {
 	fmt.Println("Fetching race details from racetime...")
 
-	url := fmt.Sprintf("postgres://%s:%s@%s:%s/randomizer_stats", os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PWD"), os.Getenv("POSTGRES_URL"), os.Getenv("POSTGRES_PORT"))
+	url := fmt.Sprintf("host=%s user=%s password=%s port=%s dbname=randomizer_stats", os.Getenv("POSTGRES_URL"), os.Getenv("POSTGRES_USER"), os.Getenv("POSTGRES_PWD"), os.Getenv("POSTGRES_PORT"))
 
 	dbpool, err := pgxpool.New(context.Background(), url)
 
@@ -71,13 +71,17 @@ func FetchRaceDetailsFromRacetime() {
 	//We know we have all of the detailJobs, so we can close here
 	close(detailJobs)
 
+	fmt.Println("Finished Page Workgroup")
+
 	racewg.Wait()
 
 	//We know we have all the results now, so close the channels
 	close(results)
 
+	fmt.Println("Finished Race Workgroup")
+
 	insertTaskLogArgs := pgx.NamedArgs{
-		"dateRan":      time.Now(),
+		"dateRan":      time.Now().Format(time.RFC3339),
 		"racesFetched": len(results),
 		"successful":   true,
 	}
@@ -85,8 +89,8 @@ func FetchRaceDetailsFromRacetime() {
 	_, taskLogError := dbpool.Exec(context.Background(), `INSERT INTO TaskLog (date_ran, races_fetched, successful) VALUES (@dateRan, @racesFetched, @successful)`, insertTaskLogArgs)
 
 	if taskLogError != nil {
-		fmt.Print("Error inserting task log error. Oh no!")
+		fmt.Println("Error inserting task log error. Oh no!")
 	}
 
-	fmt.Print("Finished fetching race data from racetime!")
+	fmt.Println("Finished fetching race data from racetime!")
 }
