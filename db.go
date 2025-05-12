@@ -37,6 +37,44 @@ func GetRaceByName(queryArgs pgx.NamedArgs) (string, error) {
 	return race, nil
 }
 
+func GetRacesByRaceEntrant(queryArgs pgx.NamedArgs) ([]RaceEntrantAndRaceRecord, error) {
+	rows, _ := pool.Query(context.Background(), `SELECT 
+	 RaceEntrants.id,
+	 RaceEntrants.race_id,
+	 RaceEntrants.entrant_id,
+	 RaceEntrants.finish_time,
+	 RaceEntrants.place,
+	 RaceEntrants.place_ordinal,
+	 RaceEntrants.status,
+	 Races.name,
+	 Races.category_name,
+	 Races.category_short_name,
+	 Races.url,
+	 Races.goal_name,
+	 Races.started_at FROM RaceEntrants 
+	 	LEFT JOIN Races ON RaceEntrants.race_id = Races.id 
+	 	WHERE RaceEntrants.entrant_id = @entrantId and goal_name = 'Blitz / 4 Chapters LCL Beat Bowser'`, queryArgs)
+
+	records, err := pgx.CollectRows(rows, pgx.RowToStructByName[RaceEntrantAndRaceRecord])
+
+	if err != nil {
+		return nil, err
+	}
+
+	return records, nil
+}
+
+func GetEntrant(queryArgs pgx.NamedArgs) (int, error) {
+	var entrant_id int
+	queryError := pool.QueryRow(context.Background(), `SELECT id FROM Entrants WHERE name = @entrantName`, queryArgs).Scan(&entrant_id)
+
+	if queryError != nil {
+		return -1, queryError
+	}
+
+	return entrant_id, nil
+}
+
 func InsertRaceDetails(details RaceDetail) error {
 	insertArgs := pgx.NamedArgs{
 		"name":              details.Name,

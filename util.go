@@ -42,7 +42,6 @@ func CalculateDeviation(times []int, average int, count int) float64 {
 
 	for _, seconds := range times {
 		deviationSum += math.Pow(float64(seconds - average), 2)
-		println(deviationSum)
 	}
 
 	deviationAverage := deviationSum / float64(count)

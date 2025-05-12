@@ -38,12 +38,16 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Use(middleware.Logger)
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		entrant := chi.URLParam(r, "ContainsEntrant")
+	r.Get("/api/get_statistics_for_entrant", func(w http.ResponseWriter, r *http.Request) {
+		entrant := r.URL.Query().Get("ContainsEntrant") //chi.URLParam(r, "ContainsEntrant")
 
-		response := GetRaceAverageByFilters(StatisticsRequest{
+		response, error := GetRaceAverageByFilters(StatisticsRequest{
 			ContainsEntrant: entrant,
 		})
+
+		if error != nil {
+			http.Error(w, "Failed to get resource", http.StatusInternalServerError)
+		}
 
 		render.JSON(w, r, response)
 	})

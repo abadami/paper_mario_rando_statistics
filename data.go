@@ -1,5 +1,7 @@
 package main
 
+import "time"
+
 type RaceByPageResponse struct {
 	Count    int    `json:"count"`
 	NumPages int    `json:"num_pages"`
@@ -96,9 +98,27 @@ type StatisticsResponse struct {
 	Average    string
 	Deviation  string
 	RaceNumber int
+	DnfCount int
+	RawData []RaceEntrantAndRaceRecord
 }
 
-/* type RaceRecord struct {
+type RaceEntrantAndRaceRecord struct {
+	Id                  int       
+	Race_id             int       
+	Entrant_id          int       
+	Finish_time         string    
+	Place               int       
+	Place_ordinal       string    
+	Status              string    
+	Name                string    
+	Category_name       string    
+	Category_short_name string    
+	Url                 string    
+	Goal_name           string    
+	Started_at          time.Time 
+}
+
+type RaceRecord struct {
 	id                  int
 	name                string
 	category_name       string
@@ -129,4 +149,4 @@ type TaskLogRecord struct {
 	date_ran      string
 	races_fetched int
 	successful    bool
-} */
+}
