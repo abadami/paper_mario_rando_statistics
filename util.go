@@ -37,6 +37,18 @@ func ParseSecondsToTime(seconds int) string {
 	return fmt.Sprintf("%d:%d:%d", hours, minutes, seconds_tracker)
 }
 
+func CalculateAverage(times []int) int {
+	sum := 0
+	
+	for _, seconds := range times {
+		sum += seconds
+	}
+
+	average := sum / len(times)
+
+	return average
+}
+
 func CalculateDeviation(times []int, average int, count int) float64 {
 	deviationSum := 0.0
 

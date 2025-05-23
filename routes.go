@@ -21,7 +21,6 @@ func GetRaceAverageByFilters(request StatisticsRequest) (StatisticsResponse, err
 		return StatisticsResponse{}, error
 	}
 
-	sum := 0
 	count := 0
 
 	dnfCount := 0
@@ -35,11 +34,9 @@ func GetRaceAverageByFilters(request StatisticsRequest) (StatisticsResponse, err
 		}
 		time := ParseTimeString(raceDetail.Finish_time)
 		times = append(times, time)
-		sum += time
-		count += 1
 	}
 
-	average := sum / count
+	average := CalculateAverage(times)
 
 	deviation := CalculateDeviation(times, average, count)
 
