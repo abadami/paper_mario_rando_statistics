@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@esbuild/linux-x64':
+        specifier: ^0.25.4
+        version: 0.25.4
       '@esbuild/win32-x64':
         specifier: ^0.25.4
         version: 0.25.4
@@ -2325,8 +2328,7 @@ snapshots:
   '@esbuild/linux-s390x@0.25.4':
     optional: true
 
-  '@esbuild/linux-x64@0.25.4':
-    optional: true
+  '@esbuild/linux-x64@0.25.4': {}
 
   '@esbuild/netbsd-arm64@0.25.4':
     optional: true
