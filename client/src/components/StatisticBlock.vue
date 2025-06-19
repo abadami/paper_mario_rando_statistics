@@ -6,10 +6,10 @@ defineProps<{
 </script>
 
 <template>
-  <div class="statistic-block">
-    <h4 class="statistic-header">{{ title }}</h4>
-    <p class="statistic-value">{{ value }}</p>
-  </div>
+  <Card>
+    <template #title>{{ title }}</template>
+    <template #content>{{ value }}</template>
+  </Card>
 </template>
 
 <style></style>
