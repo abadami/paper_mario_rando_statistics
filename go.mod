@@ -5,6 +5,7 @@ go 1.23.4
 require github.com/senseyeio/duration v0.0.0-20180430131211-7c2a214ada46
 
 require (
+	github.com/go-chi/cors v1.2.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/puddle/v2 v2.1.2 // indirect

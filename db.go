@@ -75,6 +75,18 @@ func GetEntrant(queryArgs pgx.NamedArgs) (int, error) {
 	return entrant_id, nil
 }
 
+func GetEntrants() ([]EntrantRecord, error) {
+	rows, _ := pool.Query(context.Background(), `SELECT * FROM Entrants`)
+
+	records, err := pgx.CollectRows(rows, pgx.RowToStructByName[EntrantRecord])
+
+	if err != nil {
+		return nil, err
+	}
+
+	return records, nil
+}
+
 func InsertRaceDetails(details RaceDetail) error {
 	insertArgs := pgx.NamedArgs{
 		"name":              details.Name,

@@ -90,32 +90,32 @@ type StatisticsRequest struct {
 	ParticipantLimit int
 	BeforeTime       string
 	AfterTime        string
-	ContainsEntrant  string
+	ContainsEntrant  int
 	PageNumber       int
 }
 
 type StatisticsResponse struct {
-	Average    string
-	Deviation  string
-	RaceNumber int
-	DnfCount int
-	RawData []RaceEntrantAndRaceRecord
+	Average    string `json:"average"`
+	Deviation  string `json:"deviation"`
+	RaceNumber int `json:"raceNumber"`
+	DnfCount int `json:"dnfCount"`
+	RawData []RaceEntrantAndRaceRecord `json:"rawData"`
 }
 
 type RaceEntrantAndRaceRecord struct {
-	Id                  int       
-	Race_id             int       
-	Entrant_id          int       
-	Finish_time         string    
-	Place               int       
-	Place_ordinal       string    
-	Status              string    
-	Name                string    
-	Category_name       string    
-	Category_short_name string    
-	Url                 string    
-	Goal_name           string    
-	Started_at          time.Time 
+	Id                  int       `json:"id"`
+	Race_id             int       `json:"race_id"`
+	Entrant_id          int       `json:"entrant_id"`
+	Finish_time         string    `json:"finish_time`
+	Place               int       `json:"place"`
+	Place_ordinal       string    `json:"place_ordinal"`
+	Status              string    `json:"status"`
+	Name                string    `json:"name"`
+	Category_name       string    `json:"category_name`
+	Category_short_name string    `json:"category_short_name`
+	Url                 string    `json:"url"`
+	Goal_name           string    `json:"goal_name`
+	Started_at          time.Time `json:"started_at`
 }
 
 type RaceRecord struct {
@@ -129,9 +129,9 @@ type RaceRecord struct {
 }
 
 type EntrantRecord struct {
-	id        int
-	name      string
-	full_name string
+	Id        int `json:"id"`
+	Name      string `json:"name"`
+	Full_name string `json:"full_name"`
 }
 
 type RaceEntrantRecord struct {

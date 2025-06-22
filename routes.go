@@ -1,20 +1,15 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/jackc/pgx/v5"
 )
 
 func GetRaceAverageByFilters(request StatisticsRequest) (StatisticsResponse, error) {
-	entrantId, getEntrantError := GetEntrant(pgx.NamedArgs{
-		"entrantName": request.ContainsEntrant,
-	})
-	
-	if getEntrantError != nil {
-		return StatisticsResponse{}, getEntrantError
-	}
-
+	fmt.Printf("%d", request.ContainsEntrant)
 	results, error := GetRacesByRaceEntrant(pgx.NamedArgs{
-		"entrantId": entrantId,
+		"entrantId": request.ContainsEntrant,
 	})
 
 	if error != nil {
@@ -32,8 +27,19 @@ func GetRaceAverageByFilters(request StatisticsRequest) (StatisticsResponse, err
 			dnfCount += 1
 			continue
 		}
+		count += 1
 		time := ParseTimeString(raceDetail.Finish_time)
 		times = append(times, time)
+	}
+
+	if count == 0 {
+		return StatisticsResponse{
+			Average: "00:00:00",
+			Deviation: "00:00:00",
+			RaceNumber: 0,
+			DnfCount: 0,
+			RawData: []RaceEntrantAndRaceRecord{}, 
+		}, nil
 	}
 
 	average := CalculateAverage(times)
@@ -47,4 +53,14 @@ func GetRaceAverageByFilters(request StatisticsRequest) (StatisticsResponse, err
 		DnfCount: dnfCount,
 		RawData: results, 
 	}, nil
+}
+
+func GetRaceEntrants() ([]EntrantRecord, error) {
+	entrants, err := GetEntrants()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return entrants, nil
 }
