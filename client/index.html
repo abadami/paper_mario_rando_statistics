@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>PM64R Stats</title>
   </head>
   <body>
     <div id="app">
@@ -16,12 +16,21 @@
       <div id="statistic-information">
         <div class="statistic-card" id="average">
           <h4 class="statistic-title">Average</h4>
-          <span class="statistic-value" id="average-value">01:54:23</span>
+          <span class="statistic-value" id="average-value">00:00:00</span>
         </div>
         <div class="statistic-card" id="standard deviation">
           <h4 class="statistic-title">Standard Deviation</h4>
-          <span class="statistic-value" id="deviation-value">00:24:23</span>
+          <span class="statistic-value" id="deviation-value">00:00:00</span>
         </div>
+        <table>
+          <thead>
+            <th>Date</th>
+            <th>Race Name</th>
+            <th>Place</th>
+            <th>Finish Time</th>
+          </thead>
+          <tbody id="statistics-raw-data" />
+        </table>
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>

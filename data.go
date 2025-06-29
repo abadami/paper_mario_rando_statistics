@@ -106,26 +106,26 @@ type RaceEntrantAndRaceRecord struct {
 	Id                  int       `json:"id"`
 	Race_id             int       `json:"race_id"`
 	Entrant_id          int       `json:"entrant_id"`
-	Finish_time         string    `json:"finish_time`
+	Finish_time         string    `json:"finish_time"`
 	Place               int       `json:"place"`
 	Place_ordinal       string    `json:"place_ordinal"`
 	Status              string    `json:"status"`
 	Name                string    `json:"name"`
-	Category_name       string    `json:"category_name`
-	Category_short_name string    `json:"category_short_name`
+	Category_name       string    `json:"category_name"`
+	Category_short_name string    `json:"category_short_name"`
 	Url                 string    `json:"url"`
-	Goal_name           string    `json:"goal_name`
-	Started_at          time.Time `json:"started_at`
+	Goal_name           string    `json:"goal_name"`
+	Started_at          time.Time `json:"started_at"`
 }
 
 type RaceRecord struct {
-	id                  int
-	name                string
-	category_name       string
-	category_short_name string
-	url                 string
-	goal_name           string
-	started_at          string
+	Id                  int `json:"id"`
+	Name                string `json:"name"`
+	Category_name       string `json:"category_name"`
+	Category_short_name string `json:"category_short_name"`
+	Url                 string `json:"url"`
+	Goal_name           string `json:"goal_name"`
+	Started_at          string `json:"started_at"`
 }
 
 type EntrantRecord struct {
@@ -135,18 +135,18 @@ type EntrantRecord struct {
 }
 
 type RaceEntrantRecord struct {
-	id            int
-	race_id       int
-	entrant_id    int
-	finish_time   string
-	place         int
-	place_ordinal string
-	status        string
+	Id            int `json:"id"`
+	Race_id       int `json:"race_id"`
+	Entrant_id    int `json:"entrant_id"`
+	Finish_time   string `json:"finish_time"`
+	Place         int `json:"place"`
+	Place_ordinal string `json:"place_ordinal`
+	Status        string `json:"status"`
 }
 
 type TaskLogRecord struct {
-	id            int
-	date_ran      string
-	races_fetched int
-	successful    bool
+	Id            int `json:"id"`
+	Date_ran      string `json:"date_ran"`
+	Races_fetched int `json:"races_fetch"`
+	Successful    bool `json:"successful"`
 }

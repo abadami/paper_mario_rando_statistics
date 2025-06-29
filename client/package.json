@@ -11,5 +11,9 @@
   "devDependencies": {
     "typescript": "~5.8.3",
     "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "iso8601-duration": "^2.1.2"
   }
 }

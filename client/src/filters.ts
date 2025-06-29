@@ -6,6 +6,8 @@ export async function setupUserFilter(element: HTMLSelectElement) {
     const response = await fetch("http://localhost:3000/api/get_race_entrants");
     const entrants: Entrant[] = await response.json();
 
+    element.innerHTML += `<option value="all">All</option>`;
+
     for (const entrant of entrants) {
       element.innerHTML += `<option value=${entrant.id}>${entrant.name}</option>`;
     }

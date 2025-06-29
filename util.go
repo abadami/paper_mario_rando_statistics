@@ -34,7 +34,7 @@ func ParseSecondsToTime(seconds int) string {
 
 	seconds_tracker -= minutes * 60
 
-	return fmt.Sprintf("%d:%d:%d", hours, minutes, seconds_tracker)
+	return fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds_tracker)
 }
 
 func CalculateAverage(times []int) int {
