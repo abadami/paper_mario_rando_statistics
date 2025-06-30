@@ -1,5 +1,4 @@
 import type { RaceEntrantAndRaceRecord, StatisticsResponse } from "./types";
-import { format } from "date-fns";
 import { parseTimeString } from "./util";
 
 function updateAverageCard(value: string) {
@@ -18,6 +17,10 @@ function updateRawDataTable(records: RaceEntrantAndRaceRecord[]) {
   const element = document.querySelector<HTMLTableSectionElement>(
     "#statistics-raw-data"
   )!;
+
+  for (let i = 0; i < element.rows.length; i++) {
+    element.deleteRow(i);
+  }
 
   for (const record of records) {
     const newRow = element.insertRow();

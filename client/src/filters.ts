@@ -15,11 +15,7 @@ export async function setupUserFilter(element: HTMLSelectElement) {
     element.addEventListener("change", (e: Event) => {
       const elementValue = (e.target as HTMLSelectElement).value;
 
-      console.log(elementValue);
-
-      const value = parseInt((e.target as HTMLSelectElement).value);
-
-      console.log("Selected Value: ", value);
+      const value = parseInt(elementValue);
 
       updateStatistics(value);
     });
@@ -29,4 +25,4 @@ export async function setupUserFilter(element: HTMLSelectElement) {
   }
 }
 
-export function setupCategoryFilter(element: HTMLSelectElement) {}
+//export function setupCategoryFilter(element: HTMLSelectElement) {}
