@@ -27,3 +27,15 @@ export interface StatisticsResponse {
   dnfCount: number;
   rawData: RaceEntrantAndRaceRecord[];
 }
+
+export interface CategoryDetails {
+  name: string;
+  short_name: string;
+  slug: string;
+  url: string;
+  data_url: string;
+  image: string;
+  info: string;
+  streaming_required: boolean;
+  goals: string[];
+}

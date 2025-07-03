@@ -92,6 +92,7 @@ type StatisticsRequest struct {
 	AfterTime        string
 	ContainsEntrant  int
 	PageNumber       int
+	Goal 						 string
 }
 
 type StatisticsResponse struct {

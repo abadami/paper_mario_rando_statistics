@@ -77,15 +77,23 @@ func main() {
 
 	r.Get("/api/get_statistics_for_entrant", func(w http.ResponseWriter, r *http.Request) {
 		entrant := r.URL.Query().Get("ContainsEntrant") //chi.URLParam(r, "ContainsEntrant")
+		goal := r.URL.Query().Get("Goal")
 
-		entrant_id, conversionError := strconv.Atoi(entrant)
+		entrant_id := -1
 
-		if conversionError != nil {
-			http.Error(w, "Not a valid id value for contains entrant", http.StatusBadRequest)
+		if (entrant != "") {
+			paramConversion, conversionError := strconv.Atoi(entrant)
+
+			if conversionError != nil {
+				http.Error(w, "Not a valid id value for contains entrant", http.StatusBadRequest)
+			}
+
+			entrant_id = paramConversion
 		}
 
 		response, error := GetRaceAverageByFilters(StatisticsRequest{
 			ContainsEntrant: entrant_id,
+			Goal: goal,
 		})
 
 		if error != nil {

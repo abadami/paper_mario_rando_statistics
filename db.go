@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -37,8 +38,15 @@ func GetRaceByName(queryArgs pgx.NamedArgs) (string, error) {
 	return race, nil
 }
 
-func GetRacesByRaceEntrant(queryArgs pgx.NamedArgs) ([]RaceEntrantAndRaceRecord, error) {
-	rows, _ := pool.Query(context.Background(), `SELECT 
+func GetRacesByRaceEntrant(request StatisticsRequest) ([]RaceEntrantAndRaceRecord, error) {
+	var queryBuilder strings.Builder
+	
+	var queryArgs = pgx.NamedArgs{
+		"goal": request.Goal,
+		"entrantId": request.ContainsEntrant,
+	}
+
+	queryBuilder.WriteString(`SELECT 
 	 RaceEntrants.id,
 	 RaceEntrants.race_id,
 	 RaceEntrants.entrant_id,
@@ -52,8 +60,14 @@ func GetRacesByRaceEntrant(queryArgs pgx.NamedArgs) ([]RaceEntrantAndRaceRecord,
 	 Races.url,
 	 Races.goal_name,
 	 Races.started_at FROM RaceEntrants 
-	 	LEFT JOIN Races ON RaceEntrants.race_id = Races.id 
-	 	WHERE RaceEntrants.entrant_id = @entrantId and goal_name = 'Blitz / 4 Chapters LCL Beat Bowser'`, queryArgs)
+	 	LEFT JOIN Races ON RaceEntrants.race_id = Races.id
+		WHERE goal_name = @goal`)
+
+	if (request.ContainsEntrant > -1) {
+		queryBuilder.WriteString(" and RaceEntrants.entrant_id = @entrantId")
+	}
+
+	rows, _ := pool.Query(context.Background(), queryBuilder.String(), queryArgs)
 
 	records, err := pgx.CollectRows(rows, pgx.RowToStructByName[RaceEntrantAndRaceRecord])
 

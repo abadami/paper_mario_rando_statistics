@@ -2,15 +2,11 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/jackc/pgx/v5"
 )
 
 func GetRaceAverageByFilters(request StatisticsRequest) (StatisticsResponse, error) {
 	fmt.Printf("%d", request.ContainsEntrant)
-	results, error := GetRacesByRaceEntrant(pgx.NamedArgs{
-		"entrantId": request.ContainsEntrant,
-	})
+	results, error := GetRacesByRaceEntrant(request)
 
 	if error != nil {
 		return StatisticsResponse{}, error

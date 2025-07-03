@@ -1,46 +1,22 @@
-import type { RaceEntrantAndRaceRecord, StatisticsResponse } from "./types";
-import { parseTimeString } from "./util";
+import type { StatisticsResponse } from "./types";
+import {
+  updateAverageCard,
+  updateDeviationCard,
+} from "./ui-managers/card-manager.ui";
+import { updateRawDataTable } from "./ui-managers/raw-data-table-manager.ui";
 
-function updateAverageCard(value: string) {
-  const element = document.querySelector<HTMLSpanElement>("#average-value")!;
-
-  element.textContent = value;
-}
-
-function updateDeviationCard(value: string) {
-  const element = document.querySelector<HTMLSpanElement>("#deviation-value")!;
-
-  element.textContent = value;
-}
-
-function updateRawDataTable(records: RaceEntrantAndRaceRecord[]) {
-  const element = document.querySelector<HTMLTableSectionElement>(
-    "#statistics-raw-data"
-  )!;
-
-  for (let i = 0; i < element.rows.length; i++) {
-    element.deleteRow(i);
-  }
-
-  for (const record of records) {
-    const newRow = element.insertRow();
-
-    newRow.insertCell().textContent = new Date(
-      record.started_at
-    ).toLocaleDateString();
-    newRow.insertCell().textContent = `${record.name}`;
-    newRow.insertCell().textContent =
-      record.status === "dnf" ? "--" : record.place_ordinal;
-    newRow.insertCell().textContent =
-      record.status === "dnf" ? "DNF" : parseTimeString(record.finish_time);
-  }
-}
-
-export async function updateStatistics(entrant_id?: number) {
+export async function updateStatistics(
+  goal: string = "Blitz / 4 Chapters LCL Beat Bowser",
+  entrant_id?: number
+) {
   const filters: { filter: string; value: string | number }[] = [];
 
   if (entrant_id) {
     filters.push({ filter: "ContainsEntrant", value: entrant_id });
+  }
+
+  if (goal) {
+    filters.push({ filter: "Goal", value: goal });
   }
 
   try {
