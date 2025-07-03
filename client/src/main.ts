@@ -1,7 +1,6 @@
 import './style.css'
-import { setupUserFilter, setupCategoryFilter } from './ui-managers/filter-manager.ui.ts'
-import { updateStatistics } from './statistic-controller.ts'
-
+import { setupUserFilter, setupCategoryFilter } from './ui-managers/filter.ui.ts'
+import { updateStatistics } from './coordinators/statistic.coordinator.ts'
 
 setupUserFilter(document.querySelector<HTMLSelectElement>("#user-selector")!)
 

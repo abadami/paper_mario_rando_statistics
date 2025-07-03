@@ -1,9 +1,7 @@
-import type { StatisticsResponse } from "./types";
-import {
-  updateAverageCard,
-  updateDeviationCard,
-} from "./ui-managers/card-manager.ui";
-import { updateRawDataTable } from "./ui-managers/raw-data-table-manager.ui";
+import { fetchStatistics } from "../data-controllers/statistic.controller";
+import type { StatisticsResponse } from "../types";
+import { updateAverageCard, updateDeviationCard } from "../ui-managers/card.ui";
+import { updateRawDataTable } from "../ui-managers/raw-data-table.ui";
 
 export async function updateStatistics(
   goal: string = "Blitz / 4 Chapters LCL Beat Bowser",
@@ -20,12 +18,7 @@ export async function updateStatistics(
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/get_statistics_for_entrant${
-        filters.length > 0 ? "?" : ""
-      }${filters.map((filter) => `${filter.filter}=${filter.value}`).join("&")}`
-    );
-    const statistics: StatisticsResponse = await response.json();
+    const statistics: StatisticsResponse = await fetchStatistics(filters);
 
     updateAverageCard(statistics.average);
 
