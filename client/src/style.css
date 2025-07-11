@@ -93,3 +93,28 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+#statistic-information {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: auto;
+  row-gap: 16px;
+  margin-top: 8px;
+}
+
+.statistic-card {
+  border: 1px solid white;
+  border-radius: 4px;
+  box-shadow: 0 3px 10px white;
+  padding: 16px;
+}
+
+.statistic-title {
+  margin: 0;
+  padding: 0;
+}
+
+#statistic-raw-data-table {
+  width: 1000px;
+  grid-column: span 2;
+}
