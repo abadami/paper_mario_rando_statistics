@@ -6,13 +6,15 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 
+	"github.com/abadami/randomizer-statistics/internal/repositories/postgres"
+	"github.com/abadami/randomizer-statistics/internal/repositories/racetime"
+	"github.com/abadami/randomizer-statistics/internal/services"
+	"github.com/abadami/randomizer-statistics/rest"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"github.com/go-chi/render"
 	"github.com/robfig/cron/v3"
 
 	"github.com/joho/godotenv"
@@ -43,7 +45,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	dbpool, err := CreatePool()
+	dbpool, err := postgres.CreatePool()
 
 	if (err != nil) {
 		fmt.Println("Oh no, failed to connect to db!")
@@ -52,10 +54,20 @@ func main() {
 
 	defer dbpool.Close()
 
+	//Setup services
+	//Setup repos
+	raceRepo := postgres.NewRaceRepository(dbpool)
+	entrantRepo := postgres.NewEntrantRepository(dbpool)
+	tasklogRepo := postgres.NewTaskLogRepository(dbpool)
+	racetimeRepo := racetime.NewRacetimeRepository()
+
+	//Setup services
+	racetimeService := services.NewService(racetimeRepo, raceRepo, tasklogRepo)
+
 	c := cron.New()
 	c.AddFunc("0 * * * *", func() {
 		fmt.Print("Job is running!")
-		FetchRaceDetailsFromRacetime()
+		racetimeService.FetchRaceDetailsFromRacetime()
 	})
 	c.Start()
 
@@ -75,45 +87,11 @@ func main() {
 	filesDir := http.Dir(filepath.Join(workDir, "client/dist"))
 	FileServer(r, "/", filesDir)
 
-	r.Get("/api/get_statistics_for_entrant", func(w http.ResponseWriter, r *http.Request) {
-		entrant := r.URL.Query().Get("ContainsEntrant") //chi.URLParam(r, "ContainsEntrant")
-		goal := r.URL.Query().Get("Goal")
+	//Setup handlers
+	rest.NewEntrantHandler(r, entrantRepo)
+	rest.NewStatisticsHandler(r, raceRepo)
 
-		entrant_id := -1
-
-		if (entrant != "") {
-			paramConversion, conversionError := strconv.Atoi(entrant)
-
-			if conversionError != nil {
-				http.Error(w, "Not a valid id value for contains entrant", http.StatusBadRequest)
-			}
-
-			entrant_id = paramConversion
-		}
-
-		response, error := GetRaceAverageByFilters(StatisticsRequest{
-			ContainsEntrant: entrant_id,
-			Goal: goal,
-		})
-
-		if error != nil {
-			http.Error(w, "Failed to get resource", http.StatusInternalServerError)
-		}
-
-		render.JSON(w, r, response)
-	})
-
-	r.Get("/api/get_race_entrants", func(w http.ResponseWriter, r *http.Request) {
-		response, error := GetRaceEntrants()
-
-		if error != nil {
-			http.Error(w, "Failed to get resources", http.StatusInternalServerError)
-		}
-
-		render.JSON(w, r, response)
-	})
-
-	r.Get("/api/run_race_job", func(w http.ResponseWriter, r *http.Request) {
+	/*r.Get("/api/run_race_job", func(w http.ResponseWriter, r *http.Request) {
 		FetchRaceDetailsFromRacetime()
 
 		response := struct {
@@ -123,6 +101,7 @@ func main() {
 		}
 
 		render.JSON(w, r, response)
-	})
+	})*/
+
 	http.ListenAndServe(":3000", r)
 }

@@ -1,13 +1,23 @@
-package main
+package racetime
 
 import (
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/abadami/randomizer-statistics/domain"
 )
 
-func GetRaceTitlesAndEntrantsByPage(pageNum int) RaceByPageResponse {
+type RacetimeRepository struct {
+
+}
+
+func NewRacetimeRepository() *RacetimeRepository {
+	return &RacetimeRepository{}
+}
+
+func (*RacetimeRepository) GetRaceTitlesAndEntrantsByPage(pageNum int) domain.RaceByPageResponse {
 	url := fmt.Sprintf("https://racetime.gg/pm64r/races/data?show_entrants=1&page=%d&per_page=100", pageNum)
 
 	resp, err := http.Get(url)
@@ -20,16 +30,16 @@ func GetRaceTitlesAndEntrantsByPage(pageNum int) RaceByPageResponse {
 
 	body, _ := io.ReadAll(resp.Body)
 
-	response := RaceByPageResponse{}
+	response := domain.RaceByPageResponse{}
 	unmarshalErr := json.Unmarshal(body, &response)
 	if unmarshalErr != nil {
-		return RaceByPageResponse{}
+		return domain.RaceByPageResponse{}
 	}
 
 	return response
 }
 
-func GetRaceDetails(raceName string) RaceDetail {
+func (*RacetimeRepository) GetRaceDetails(raceName string) domain.RaceDetail {
 	url := fmt.Sprintf("https://racetime.gg/%s/data", raceName)
 
 	resp, err := http.Get(url)
@@ -42,10 +52,10 @@ func GetRaceDetails(raceName string) RaceDetail {
 
 	body, _ := io.ReadAll(resp.Body)
 
-	response := RaceDetail{}
+	response := domain.RaceDetail{}
 	unmarshalErr := json.Unmarshal(body, &response)
 	if unmarshalErr != nil {
-		return RaceDetail{}
+		return domain.RaceDetail{}
 	}
 
 	return response
