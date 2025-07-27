@@ -6,7 +6,8 @@ import { compareDesc } from "date-fns";
 
 export async function updateStatistics(
   goal: string = "Blitz / 4 Chapters LCL Beat Bowser",
-  entrant_id?: number
+  entrant_id?: number,
+  raceType?: string
 ) {
   const filters: { filter: string; value: string | number }[] = [];
 
@@ -16,6 +17,10 @@ export async function updateStatistics(
 
   if (goal) {
     filters.push({ filter: "Goal", value: goal });
+  }
+
+  if (raceType) {
+    filters.push({ filter: "RaceType", value: raceType });
   }
 
   try {

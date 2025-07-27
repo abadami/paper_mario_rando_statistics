@@ -5,6 +5,7 @@ import { fetchEntrants } from "../data-controllers/entrant.controller";
 
 let entrant_id = -1;
 let category = "Blitz / 4 Chapters LCL Beat Bowser";
+let raceType = "";
 
 export async function setupUserFilter(element: HTMLSelectElement) {
   try {
@@ -23,7 +24,7 @@ export async function setupUserFilter(element: HTMLSelectElement) {
 
       entrant_id = value;
 
-      updateStatistics(category, value);
+      updateStatistics(category, value, raceType);
     });
   } catch (error) {
     console.log(error);
@@ -46,11 +47,23 @@ export async function setupCategoryFilter(element: HTMLSelectElement) {
 
       category = goal;
 
-      updateStatistics(goal, entrant_id);
+      updateStatistics(goal, entrant_id, raceType);
     });
   } catch (error) {
     console.log("How did we get here");
     console.log(error);
     return;
   }
+}
+
+export function setupRaceTypeFilter(element: HTMLSelectElement) {
+  element.value = "";
+
+  element.addEventListener("change", (e: Event) => {
+    const type = (e.target as HTMLSelectElement).value;
+
+    raceType = type;
+
+    updateStatistics(category, entrant_id, type);
+  });
 }
