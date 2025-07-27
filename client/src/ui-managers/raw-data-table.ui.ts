@@ -11,7 +11,7 @@ function insertDataIntoTable(record: RaceEntrantAndRaceRecord) {
   newRow.insertCell().textContent = new Date(
     record.started_at
   ).toLocaleDateString();
-  newRow.insertCell().textContent = `${record.name}`;
+  newRow.insertCell().innerHTML = `<a href="https://racetime.gg/${record.name}" target="_blank">${record.name}</a>`;
   newRow.insertCell().textContent =
     record.status === "dnf" ? "--" : record.place_ordinal;
   newRow.insertCell().textContent =
