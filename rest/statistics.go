@@ -27,6 +27,7 @@ func NewStatisticsHandler(c *chi.Mux, repo RaceRepository) {
 	c.Get("/api/get_statistics_for_entrant", func(w http.ResponseWriter, r *http.Request) {
 		entrant := r.URL.Query().Get("ContainsEntrant") //chi.URLParam(r, "ContainsEntrant")
 		goal := r.URL.Query().Get("Goal")
+		raceType := r.URL.Query().Get("raceType")
 
 		entrant_id := -1
 
@@ -43,6 +44,7 @@ func NewStatisticsHandler(c *chi.Mux, repo RaceRepository) {
 		response, error := handler.GetRaceAverageByFilters(domain.StatisticsRequest{
 			ContainsEntrant: entrant_id,
 			Goal: goal,
+			RaceType: raceType,
 		})
 
 		if error != nil {

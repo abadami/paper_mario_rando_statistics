@@ -87,7 +87,7 @@ type StatisticRequest struct {
 }
 
 type StatisticsRequest struct {
-	ParticipantLimit int
+	RaceType string
 	BeforeTime       string
 	AfterTime        string
 	ContainsEntrant  int

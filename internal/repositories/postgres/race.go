@@ -50,12 +50,20 @@ func (repo *RaceRepository) GetRacesByRaceEntrant(request domain.StatisticsReque
 	 Races.category_short_name,
 	 Races.url,
 	 Races.goal_name,
-	 Races.started_at FROM RaceEntrants 
+	 Races.started_at FROM RaceEntrants
 	 	LEFT JOIN Races ON RaceEntrants.race_id = Races.id
 		WHERE goal_name = @goal`)
 
 	if (request.ContainsEntrant > -1) {
 		queryBuilder.WriteString(" and RaceEntrants.entrant_id = @entrantId")
+	}
+
+	if (request.RaceType == "league") {
+		queryBuilder.WriteString(" and (SELECT COUNT(*) FROM RaceEntrants WHERE race_id = Races.id) = 2")
+	}
+
+	if (request.RaceType == "community") {
+		queryBuilder.WriteString(" and (SELECT COUNT(*) FROM RaceEntrants WHERE race_id = Races.id) > 2")
 	}
 
 	rows, _ := repo.pool.Query(context.Background(), queryBuilder.String(), queryArgs)
