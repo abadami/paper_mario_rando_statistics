@@ -2,6 +2,7 @@ import { fetchStatistics } from "../data-controllers/statistic.controller";
 import type { StatisticsResponse } from "../types";
 import { updateAverageCard, updateDeviationCard } from "../ui-managers/card.ui";
 import { updateRawDataTable } from "../ui-managers/raw-data-table.ui";
+import { compareDesc } from "date-fns";
 
 export async function updateStatistics(
   goal: string = "Blitz / 4 Chapters LCL Beat Bowser",
@@ -20,11 +21,15 @@ export async function updateStatistics(
   try {
     const statistics: StatisticsResponse = await fetchStatistics(filters);
 
+    const sortRawData = statistics.rawData.sort((raceA, raceB) =>
+      compareDesc(raceA.started_at, raceB.started_at)
+    );
+
     updateAverageCard(statistics.average);
 
     updateDeviationCard(statistics.deviation);
 
-    updateRawDataTable(statistics.rawData);
+    updateRawDataTable(sortRawData);
   } catch (error) {
     console.log(error);
     return;

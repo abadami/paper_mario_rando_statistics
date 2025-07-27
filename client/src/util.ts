@@ -5,5 +5,18 @@ export function parseTimeString(timeString: string): string {
 
   const flooredSeconds = typeof seconds === "number" ? Math.floor(seconds) : 0;
 
-  return `${hours}:${minutes}:${flooredSeconds}`;
+  const formattedHours = hours ? formatSingleDigitNumbers(hours) : 0;
+
+  const formattedMinutes = minutes ? formatSingleDigitNumbers(minutes) : 0;
+
+  const formattedSeconds = formatSingleDigitNumbers(flooredSeconds);
+
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+}
+
+export function formatSingleDigitNumbers(number: number): string {
+  return number.toLocaleString("en-US", {
+    minimumIntegerDigits: 2,
+    useGrouping: false,
+  });
 }
