@@ -101,6 +101,7 @@ type StatisticsResponse struct {
 	RaceNumber int `json:"raceNumber"`
 	DnfCount int `json:"dnfCount"`
 	RawData []RaceEntrantAndRaceRecord `json:"rawData"`
+	FullRawData []RaceEntrantAndRaceRecord `json:"fullRawData"`
 }
 
 type RaceEntrantAndRaceRecord struct {

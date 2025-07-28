@@ -26,7 +26,12 @@ export async function updateStatistics(
   try {
     const statistics: StatisticsResponse = await fetchStatistics(filters);
 
-    const sortRawData = statistics.rawData.sort((raceA, raceB) =>
+    const data =
+      typeof entrant_id === "undefined" || entrant_id === -1
+        ? statistics.fullRawData
+        : statistics.rawData;
+
+    const sortRawData = data.sort((raceA, raceB) =>
       compareDesc(raceA.started_at, raceB.started_at)
     );
 

@@ -54,8 +54,10 @@ func (repo *RaceRepository) GetRacesByRaceEntrant(request domain.StatisticsReque
 	 	LEFT JOIN Races ON RaceEntrants.race_id = Races.id
 		WHERE goal_name = @goal`)
 
+	fmt.Printf("%d", request.ContainsEntrant)
+
 	if (request.ContainsEntrant > -1) {
-		queryBuilder.WriteString(" and RaceEntrants.entrant_id = @entrantId")
+		queryBuilder.WriteString(" and Races.id in (Select RaceEntrants.race_id From RaceEntrants where RaceEntrants.entrant_id = @entrantId)")
 	}
 
 	if (request.RaceType == "league") {

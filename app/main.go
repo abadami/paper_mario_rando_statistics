@@ -54,7 +54,6 @@ func main() {
 
 	defer dbpool.Close()
 
-	//Setup services
 	//Setup repos
 	raceRepo := postgres.NewRaceRepository(dbpool)
 	entrantRepo := postgres.NewEntrantRepository(dbpool)

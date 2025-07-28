@@ -26,6 +26,7 @@ export interface StatisticsResponse {
   raceNumber: number;
   dnfCount: number;
   rawData: RaceEntrantAndRaceRecord[];
+  fullRawData: RaceEntrantAndRaceRecord[];
 }
 
 export interface CategoryDetails {

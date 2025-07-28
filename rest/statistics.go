@@ -55,6 +55,7 @@ func NewStatisticsHandler(c *chi.Mux, repo RaceRepository) {
 	})
 }
 
+//TODO: Too much business logic here. Needs to be moved to a service
 func (handler *StatisticsHandler) GetRaceAverageByFilters(request domain.StatisticsRequest) (domain.StatisticsResponse, error) {
 fmt.Printf("%d", request.ContainsEntrant)
 	results, error := handler.raceRepository.GetRacesByRaceEntrant(request)
@@ -63,13 +64,28 @@ fmt.Printf("%d", request.ContainsEntrant)
 		return domain.StatisticsResponse{}, error
 	}
 
+	entrantData := []domain.RaceEntrantAndRaceRecord{}
+
+	for _, raceDetail := range results {
+		if (raceDetail.Entrant_id == request.ContainsEntrant) {
+			entrantData = append(entrantData, raceDetail)
+		}
+	}
+
 	count := 0
 
 	dnfCount := 0
 
+	data := entrantData
+
+	//Need to handle the "all" data situation
+	if request.ContainsEntrant == -1 {
+		data = results
+	}
+
 	var times []int
 	
-	for _, raceDetail := range results {
+	for _, raceDetail := range data {
 		if (raceDetail.Status == "dnf") {
 			dnfCount += 1
 			continue
@@ -86,18 +102,21 @@ fmt.Printf("%d", request.ContainsEntrant)
 			RaceNumber: 0,
 			DnfCount: 0,
 			RawData: []domain.RaceEntrantAndRaceRecord{}, 
+			FullRawData: []domain.RaceEntrantAndRaceRecord{},
 		}, nil
 	}
-
+	
 	average := utils.CalculateAverage(times)
 
 	deviation := utils.CalculateDeviation(times, average, count)
 
+	//TODO: Determine if we even need to return the "full raw data". Users can just get that from racetime lol
 	return domain.StatisticsResponse{
 		Average: utils.ParseSecondsToTime(average),
 		Deviation: utils.ParseSecondsToTime(int(deviation)),
 		RaceNumber: count,
 		DnfCount: dnfCount,
-		RawData: results, 
+		RawData: entrantData, 
+		FullRawData: results,
 	}, nil
 }
