@@ -98,6 +98,9 @@ type StatisticsRequest struct {
 type StatisticsResponse struct {
 	Average    string `json:"average"`
 	Deviation  string `json:"deviation"`
+	BestWin string `json:"bestWin"`
+	WorstLoss string `json:"worstLoss"`
+	AverageWin string `json:"averageWin"`
 	RaceNumber int `json:"raceNumber"`
 	DnfCount int `json:"dnfCount"`
 	RawData []RaceEntrantAndRaceRecord `json:"rawData"`

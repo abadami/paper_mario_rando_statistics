@@ -99,6 +99,9 @@ fmt.Printf("%d", request.ContainsEntrant)
 		return domain.StatisticsResponse{
 			Average: "00:00:00",
 			Deviation: "00:00:00",
+			BestWin: "00:00:00",
+			WorstLoss: "00:00:00",
+			AverageWin: "00:00:00",
 			RaceNumber: 0,
 			DnfCount: 0,
 			RawData: []domain.RaceEntrantAndRaceRecord{}, 
@@ -110,10 +113,17 @@ fmt.Printf("%d", request.ContainsEntrant)
 
 	deviation := utils.CalculateDeviation(times, average, count)
 
+	bestWin, averageWin := utils.CalculateBestWinAndAverageWin(entrantData, results)
+
+	worstLoss := utils.CalculateWorstLoss(entrantData, results)
+
 	//TODO: Determine if we even need to return the "full raw data". Users can just get that from racetime lol
 	return domain.StatisticsResponse{
 		Average: utils.ParseSecondsToTime(average),
 		Deviation: utils.ParseSecondsToTime(int(deviation)),
+		BestWin: utils.ParseSecondsToTime(bestWin),
+		WorstLoss: utils.ParseSecondsToTime(worstLoss),
+		AverageWin: utils.ParseSecondsToTime(averageWin),
 		RaceNumber: count,
 		DnfCount: dnfCount,
 		RawData: entrantData, 
