@@ -1,6 +1,6 @@
 import { fetchStatistics } from "../data-controllers/statistic.controller";
 import type { StatisticsResponse } from "../types";
-import { updateAverageCard, updateDeviationCard } from "../ui-managers/card.ui";
+import { updateCard } from "../ui-managers/card.ui";
 import { updateRawDataTable } from "../ui-managers/raw-data-table.ui";
 import { compareDesc } from "date-fns";
 
@@ -35,9 +35,11 @@ export async function updateStatistics(
       compareDesc(raceA.started_at, raceB.started_at)
     );
 
-    updateAverageCard(statistics.average);
-
-    updateDeviationCard(statistics.deviation);
+    updateCard("#average-value", statistics.average);
+    updateCard("#deviation-value", statistics.deviation);
+    updateCard("#average-win-value", statistics.averageWin);
+    updateCard("#best-win-value", statistics.bestWin);
+    updateCard("#worse-loss-value", statistics.worstLoss);
 
     updateRawDataTable(sortRawData);
   } catch (error) {

@@ -23,6 +23,9 @@ export interface RaceEntrantAndRaceRecord {
 export interface StatisticsResponse {
   average: string;
   deviation: string;
+  bestWin: string;
+  worstLoss: string;
+  averageWin: string;
   raceNumber: number;
   dnfCount: number;
   rawData: RaceEntrantAndRaceRecord[];

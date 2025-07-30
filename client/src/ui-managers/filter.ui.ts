@@ -2,10 +2,13 @@ import { fetchCategoryGoals } from "../data-controllers/category.controller";
 import { updateStatistics } from "../coordinators/statistic.coordinator";
 import type { Entrant } from "../types";
 import { fetchEntrants } from "../data-controllers/entrant.controller";
+import { hideElement, showElement } from "./ui-manager.ui";
 
 let entrant_id = -1;
 let category = "Blitz / 4 Chapters LCL Beat Bowser";
 let raceType = "";
+
+//TODO: Setup method for showing correct stat blocks based on filters
 
 export async function setupUserFilter(element: HTMLSelectElement) {
   try {
@@ -23,6 +26,23 @@ export async function setupUserFilter(element: HTMLSelectElement) {
       const value = parseInt(elementValue);
 
       entrant_id = value;
+
+      hideAllStatistics();
+
+      if (value === -1) {
+        showStatistics([
+          "average",
+          "standard-deviation",
+          "statistic-raw-data-table",
+        ]);
+      } else {
+        showStatistics([
+          "average",
+          "standard-deviation",
+          "average-win",
+          "statistic-raw-data-table",
+        ]);
+      }
 
       updateStatistics(category, value, raceType);
     });
@@ -64,6 +84,59 @@ export function setupRaceTypeFilter(element: HTMLSelectElement) {
 
     raceType = type;
 
+    hideAllStatistics();
+
+    if (type === "league") {
+      showStatistics([
+        "average",
+        "standard-deviation",
+        "average-win",
+        "best-win",
+        "worst-loss",
+        "statistic-raw-data-table",
+      ]);
+    } else if (type === "community") {
+      showStatistics([
+        "average",
+        "standard-deviation",
+        "average-win",
+        "statistic-raw-data-table",
+      ]);
+    } else {
+      showStatistics([
+        "average",
+        "standard-deviation",
+        "average-win",
+        "statistic-raw-data-table",
+      ]);
+    }
+
     updateStatistics(category, entrant_id, type);
   });
+}
+
+export function hideStatistics(ids: string[]) {
+  for (const id of ids) {
+    const element = document.querySelector<HTMLElement>(`#${id}`)!;
+
+    hideElement(element);
+  }
+}
+
+export function showStatistics(ids: string[]) {
+  for (const id of ids) {
+    const element = document.querySelector<HTMLElement>(`#${id}`)!;
+
+    showElement(element);
+  }
+}
+
+export function hideAllStatistics() {
+  const element = document.querySelector<HTMLDivElement>(
+    `#statistic-information`
+  )!;
+
+  for (const child of element.children) {
+    hideElement(child as HTMLElement);
+  }
 }
