@@ -27,22 +27,7 @@ export async function setupUserFilter(element: HTMLSelectElement) {
 
       entrant_id = value;
 
-      hideAllStatistics();
-
-      if (value === -1) {
-        showStatistics([
-          "average",
-          "standard-deviation",
-          "statistic-raw-data-table",
-        ]);
-      } else {
-        showStatistics([
-          "average",
-          "standard-deviation",
-          "average-win",
-          "statistic-raw-data-table",
-        ]);
-      }
+      showStatisticsBasedOnFilter(value, raceType);
 
       updateStatistics(category, value, raceType);
     });
@@ -84,35 +69,28 @@ export function setupRaceTypeFilter(element: HTMLSelectElement) {
 
     raceType = type;
 
-    hideAllStatistics();
-
-    if (type === "league") {
-      showStatistics([
-        "average",
-        "standard-deviation",
-        "average-win",
-        "best-win",
-        "worst-loss",
-        "statistic-raw-data-table",
-      ]);
-    } else if (type === "community") {
-      showStatistics([
-        "average",
-        "standard-deviation",
-        "average-win",
-        "statistic-raw-data-table",
-      ]);
-    } else {
-      showStatistics([
-        "average",
-        "standard-deviation",
-        "average-win",
-        "statistic-raw-data-table",
-      ]);
-    }
+    showStatisticsBasedOnFilter(entrant_id, type);
 
     updateStatistics(category, entrant_id, type);
   });
+}
+
+export function showStatisticsBasedOnFilter(entrant: number, type: string) {
+  hideAllStatistics([
+    "average",
+    "standard-deviation",
+    "statistic-raw-data-table",
+  ]);
+
+  if (entrant <= -1) {
+    return;
+  } else {
+    showStatistics(["average-win"]);
+  }
+
+  if (type === "league") {
+    showStatistics(["best-win", "worse-loss"]);
+  }
 }
 
 export function hideStatistics(ids: string[]) {
@@ -131,12 +109,16 @@ export function showStatistics(ids: string[]) {
   }
 }
 
-export function hideAllStatistics() {
+export function hideAllStatistics(exclusionList: string[]) {
   const element = document.querySelector<HTMLDivElement>(
     `#statistic-information`
   )!;
 
   for (const child of element.children) {
+    if (exclusionList.includes(child.id)) {
+      continue;
+    }
+
     hideElement(child as HTMLElement);
   }
 }
