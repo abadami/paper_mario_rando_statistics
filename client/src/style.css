@@ -1,11 +1,16 @@
+@font-face {
+  font-family: "PaperMarioFont";
+  src: local("PaperMarioFont"), url("/PaperMarioFont.ttf") format("truetype");
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "PaperMarioFont";
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #3283b4;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -106,8 +111,9 @@ button:focus-visible {
 .statistic-card {
   border: 1px solid white;
   border-radius: 4px;
-  box-shadow: 0 3px 10px white;
+  /*box-shadow: 0 3px 10px white;*/
   padding: 16px;
+  background-color: rgb(30, 49, 64);
 }
 
 .statistic-title {
@@ -116,8 +122,11 @@ button:focus-visible {
 }
 
 #statistic-raw-data-table {
-  width: 1000px;
+  width: 1250px;
   grid-column: span 3;
+  background-color: rgb(30, 49, 64);
+  border-radius: 4px;
+  padding: 16px;
 }
 
 .hide {
