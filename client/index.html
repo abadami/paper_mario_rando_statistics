@@ -10,15 +10,27 @@
     <main id="app">
       <h1>Paper Mario 64 Randomizer Race Statistics</h1>
       <div id="filter-selectors">
-        <select class="selection-filter" id="user-selector"></select>
-        <select class="selection-filter" id="category-selector"></select>
-        <select class="selection-filter" id="race-type-selector">
-          <option value="">All</option>
-          <option value="league">League (1v1)</option>
-          <option value="community">Community (More than 2 racers)</option>
-        </select>
+        <div class="filter-container">
+          <label for="user-selector">Racer</label>
+          <select class="selection-filter" id="user-selector"></select>
+        </div>
+        <div class="filter-container">
+          <label for="category-selector">Race Goal</label>
+          <select class="selection-filter" id="category-selector"></select>
+        </div>
+        <div class="filter-container">
+          <label for="race-type-selector">Racer Number</label>
+          <select class="selection-filter" id="race-type-selector">
+            <option value="">All</option>
+            <option value="league">League (1v1)</option>
+            <option value="community">Community (More than 2 racers)</option>
+          </select>
+        </div>
       </div>
-      <section id="statistic-information">
+      <section id="loading-section">
+        <p>Loading...</p>
+      </section>
+      <section class="hide" id="statistic-information">
         <div class="statistic-card" id="average">
           <h4 class="statistic-title">Average</h4>
           <span class="statistic-value" id="average-value">00:00:00</span>
@@ -39,7 +51,7 @@
           <h4 class="statistic-title">Worse Loss</h4>
           <span class="statistic-value" id="worse-loss-value">00:00:00</span>
         </div>
-        <table id="statistic-raw-data-table">
+        <table class="hide" id="statistic-raw-data-table">
           <thead>
             <th>Date</th>
             <th>Race Name</th>

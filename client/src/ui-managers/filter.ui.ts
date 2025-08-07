@@ -76,16 +76,12 @@ export function setupRaceTypeFilter(element: HTMLSelectElement) {
 }
 
 export function showStatisticsBasedOnFilter(entrant: number, type: string) {
-  hideAllStatistics([
-    "average",
-    "standard-deviation",
-    "statistic-raw-data-table",
-  ]);
+  hideAllStatistics(["average", "standard-deviation"]);
 
   if (entrant <= -1) {
     return;
   } else {
-    showStatistics(["average-win"]);
+    showStatistics(["average-win", "statistic-raw-data-table"]);
   }
 
   if (type === "league") {

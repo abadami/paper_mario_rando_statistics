@@ -3,6 +3,7 @@ import type { StatisticsResponse } from "../types";
 import { updateCard } from "../ui-managers/card.ui";
 import { updateRawDataTable } from "../ui-managers/raw-data-table.ui";
 import { compareDesc } from "date-fns";
+import { disableLoading, enableLoading } from "../ui-managers/ui-manager.ui";
 
 export async function updateStatistics(
   goal: string = "Blitz / 4 Chapters LCL Beat Bowser",
@@ -24,6 +25,8 @@ export async function updateStatistics(
   }
 
   try {
+    enableLoading();
+
     const statistics: StatisticsResponse = await fetchStatistics(filters);
 
     const data =
@@ -42,7 +45,10 @@ export async function updateStatistics(
     updateCard("#worse-loss-value", statistics.worstLoss);
 
     updateRawDataTable(sortRawData);
+
+    disableLoading();
   } catch (error) {
+    disableLoading();
     console.log(error);
     return;
   }

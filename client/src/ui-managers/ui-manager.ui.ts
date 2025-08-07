@@ -22,3 +22,25 @@ export function showElement(element: HTMLElement) {
     return;
   }
 }
+
+export function enableLoading() {
+  const statisticsElement = document.querySelector<HTMLDivElement>(
+    "#statistic-information"
+  );
+  const loadingElement =
+    document.querySelector<HTMLDivElement>("#loading-section");
+
+  hideElement(statisticsElement as HTMLElement);
+  showElement(loadingElement as HTMLElement);
+}
+
+export function disableLoading() {
+  const statisticsElement = document.querySelector<HTMLElement>(
+    "#statistic-information"
+  );
+  const loadingElement =
+    document.querySelector<HTMLElement>("#loading-section");
+
+  showElement(statisticsElement as HTMLElement);
+  hideElement(loadingElement as HTMLElement);
+}
