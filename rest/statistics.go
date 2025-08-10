@@ -1,132 +1,56 @@
 package rest
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/abadami/randomizer-statistics/domain"
-	"github.com/abadami/randomizer-statistics/internal/utils"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 )
 
-type RaceRepository interface {
-	GetRacesByRaceEntrant(request domain.StatisticsRequest) ([]domain.RaceEntrantAndRaceRecord, error)
+type StatisticsService interface {
+	GetStatisticsForEntrant(request domain.StatisticsRequest) (domain.StatisticsResponse, error)
 }
 
 type StatisticsHandler struct {
-	raceRepository RaceRepository
+	statisticsService StatisticsService
 }
 
-//This has logic that should be in a handler
-func NewStatisticsHandler(c *chi.Mux, repo RaceRepository) {
+// This has logic that should be in a handler
+func NewStatisticsHandler(c *chi.Mux, service StatisticsService) {
 	handler := &StatisticsHandler{
-		raceRepository: repo,
+		statisticsService: service,
 	}
-	c.Get("/api/get_statistics_for_entrant", func(w http.ResponseWriter, r *http.Request) {
-		entrant := r.URL.Query().Get("ContainsEntrant") //chi.URLParam(r, "ContainsEntrant")
-		goal := r.URL.Query().Get("Goal")
-		raceType := r.URL.Query().Get("RaceType")
-
-		entrant_id := -1
-
-		if (entrant != "") {
-			paramConversion, conversionError := strconv.Atoi(entrant)
-
-			if conversionError != nil {
-				http.Error(w, "Not a valid id value for contains entrant", http.StatusBadRequest)
-			}
-
-			entrant_id = paramConversion
-		}
-
-		response, error := handler.GetRaceAverageByFilters(domain.StatisticsRequest{
-			ContainsEntrant: entrant_id,
-			Goal: goal,
-			RaceType: raceType,
-		})
-
-		if error != nil {
-			http.Error(w, "Failed to get resource", http.StatusInternalServerError)
-		}
-
-		render.JSON(w, r, response)
-	})
+	c.Get("/api/get_statistics_for_entrant", handler.GetRaceAverageByFilters)
 }
 
-//TODO: Too much business logic here. Needs to be moved to a service
-func (handler *StatisticsHandler) GetRaceAverageByFilters(request domain.StatisticsRequest) (domain.StatisticsResponse, error) {
-fmt.Printf("%d", request.ContainsEntrant)
-	results, error := handler.raceRepository.GetRacesByRaceEntrant(request)
+func (handler *StatisticsHandler) GetRaceAverageByFilters(w http.ResponseWriter, r *http.Request) {
+	entrant := r.URL.Query().Get("ContainsEntrant") //chi.URLParam(r, "ContainsEntrant")
+	goal := r.URL.Query().Get("Goal")
+	raceType := r.URL.Query().Get("RaceType")
+
+	entrant_id := -1
+
+	if entrant != "" {
+		paramConversion, conversionError := strconv.Atoi(entrant)
+
+		if conversionError != nil {
+			http.Error(w, "Not a valid id value for contains entrant", http.StatusBadRequest)
+		}
+
+		entrant_id = paramConversion
+	}
+
+	response, error := handler.statisticsService.GetStatisticsForEntrant(domain.StatisticsRequest{
+		ContainsEntrant: entrant_id,
+		Goal:            goal,
+		RaceType:        raceType,
+	})
 
 	if error != nil {
-		return domain.StatisticsResponse{}, error
+		http.Error(w, "Failed to get resource", http.StatusInternalServerError)
 	}
 
-	entrantData := []domain.RaceEntrantAndRaceRecord{}
-
-	for _, raceDetail := range results {
-		if (raceDetail.Entrant_id == request.ContainsEntrant) {
-			entrantData = append(entrantData, raceDetail)
-		}
-	}
-
-	count := 0
-
-	dnfCount := 0
-
-	data := entrantData
-
-	//Need to handle the "all" data situation
-	if request.ContainsEntrant == -1 {
-		data = results
-	}
-
-	var times []int
-	
-	for _, raceDetail := range data {
-		if (raceDetail.Status == "dnf") {
-			dnfCount += 1
-			continue
-		}
-		count += 1
-		time := utils.ParseTimeString(raceDetail.Finish_time)
-		times = append(times, time)
-	}
-
-	if count == 0 {
-		return domain.StatisticsResponse{
-			Average: "00:00:00",
-			Deviation: "00:00:00",
-			BestWin: "00:00:00",
-			WorstLoss: "00:00:00",
-			AverageWin: "00:00:00",
-			RaceNumber: 0,
-			DnfCount: 0,
-			RawData: []domain.RaceEntrantAndRaceRecord{}, 
-			FullRawData: []domain.RaceEntrantAndRaceRecord{},
-		}, nil
-	}
-	
-	average := utils.CalculateAverage(times)
-
-	deviation := utils.CalculateDeviation(times, average, count)
-
-	bestWin, averageWin := utils.CalculateBestWinAndAverageWin(entrantData, results)
-
-	worstLoss := utils.CalculateWorstLoss(entrantData, results)
-
-	//TODO: Determine if we even need to return the "full raw data". Users can just get that from racetime lol
-	return domain.StatisticsResponse{
-		Average: utils.ParseSecondsToTime(average),
-		Deviation: utils.ParseSecondsToTime(int(deviation)),
-		BestWin: utils.ParseSecondsToTime(bestWin),
-		WorstLoss: utils.ParseSecondsToTime(worstLoss),
-		AverageWin: utils.ParseSecondsToTime(averageWin),
-		RaceNumber: count,
-		DnfCount: dnfCount,
-		RawData: entrantData, 
-		FullRawData: results,
-	}, nil
+	render.JSON(w, r, response)
 }

@@ -10,8 +10,9 @@ import (
 
 	"github.com/abadami/randomizer-statistics/internal/repositories/postgres"
 	"github.com/abadami/randomizer-statistics/internal/repositories/racetime"
-	"github.com/abadami/randomizer-statistics/internal/services"
+	racetime_service "github.com/abadami/randomizer-statistics/racetime"
 	"github.com/abadami/randomizer-statistics/rest"
+	"github.com/abadami/randomizer-statistics/statistics"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
@@ -61,7 +62,8 @@ func main() {
 	racetimeRepo := racetime.NewRacetimeRepository()
 
 	//Setup services
-	racetimeService := services.NewService(racetimeRepo, raceRepo, tasklogRepo)
+	racetimeService := racetime_service.NewService(racetimeRepo, raceRepo, tasklogRepo)
+	statisticsService := statistics.NewService(raceRepo)
 
 	c := cron.New()
 	c.AddFunc("0 * * * *", func() {
@@ -88,19 +90,7 @@ func main() {
 
 	//Setup handlers
 	rest.NewEntrantHandler(r, entrantRepo)
-	rest.NewStatisticsHandler(r, raceRepo)
-
-	/*r.Get("/api/run_race_job", func(w http.ResponseWriter, r *http.Request) {
-		FetchRaceDetailsFromRacetime()
-
-		response := struct {
-			success bool
-		}{
-			success: true,
-		}
-
-		render.JSON(w, r, response)
-	})*/
+	rest.NewStatisticsHandler(r, statisticsService)
 
 	fmt.Println("Server is Up")
 

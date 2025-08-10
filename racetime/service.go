@@ -1,4 +1,4 @@
-package services
+package racetime_service
 
 import (
 	"fmt"
@@ -25,15 +25,15 @@ type TaskLogRepository interface {
 
 type RacetimeService struct {
 	racetimeRepo RacetimeRepository
-	raceRepo RaceRepository
-	taskLogRepo TaskLogRepository
+	raceRepo     RaceRepository
+	taskLogRepo  TaskLogRepository
 }
 
 func NewService(ra RacetimeRepository, rac RaceRepository, task TaskLogRepository) *RacetimeService {
 	return &RacetimeService{
 		racetimeRepo: ra,
-		raceRepo: rac,
-		taskLogRepo: task,
+		raceRepo:     rac,
+		taskLogRepo:  task,
 	}
 }
 
