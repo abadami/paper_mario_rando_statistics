@@ -1,4 +1,4 @@
-package utils
+package statistics
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 
 func ParseTimeString(str string) int {
 	re := regexp.MustCompile(`\.[0-9]*`)
-	
+
 	filteredString := re.ReplaceAllString(str, "")
 
 	dur, err := duration.ParseISO8601(filteredString)
@@ -40,7 +40,7 @@ func ParseSecondsToTime(seconds int) string {
 
 func CalculateAverage(times []int) int {
 	sum := 0
-	
+
 	for _, seconds := range times {
 		sum += seconds
 	}
@@ -54,7 +54,7 @@ func CalculateDeviation(times []int, average int, count int) float64 {
 	deviationSum := 0.0
 
 	for _, seconds := range times {
-		deviationSum += math.Pow(float64(seconds - average), 2)
+		deviationSum += math.Pow(float64(seconds-average), 2)
 	}
 
 	deviationAverage := deviationSum / float64(count)
@@ -87,7 +87,7 @@ func CalculateBestWinAndAverageWin(racerData []domain.RaceEntrantAndRaceRecord, 
 			sum += difference
 			count += 1
 
-			if (difference < bestWin) {
+			if difference < bestWin {
 				bestWin = difference
 			}
 		}
@@ -113,7 +113,7 @@ func CalculateWorstLoss(racerData []domain.RaceEntrantAndRaceRecord, fullData []
 		firstPlace := getFirstPlaceRaceData(filteredRaces)
 
 		entrantRaceFinishTime := ParseTimeString(entrantRace.Finish_time)
-		raceFinishTime := ParseTimeString(firstPlace.Finish_time)		
+		raceFinishTime := ParseTimeString(firstPlace.Finish_time)
 
 		difference := entrantRaceFinishTime - raceFinishTime
 

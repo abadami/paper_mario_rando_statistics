@@ -2,7 +2,6 @@ package statistics
 
 import (
 	"github.com/abadami/randomizer-statistics/domain"
-	"github.com/abadami/randomizer-statistics/internal/utils"
 )
 
 type RaceRepository interface {
@@ -53,7 +52,7 @@ func (service *StatisticsService) GetStatisticsForEntrant(request domain.Statist
 			continue
 		}
 		count += 1
-		time := utils.ParseTimeString(raceDetail.Finish_time)
+		time := ParseTimeString(raceDetail.Finish_time)
 		times = append(times, time)
 	}
 
@@ -71,21 +70,21 @@ func (service *StatisticsService) GetStatisticsForEntrant(request domain.Statist
 		}, nil
 	}
 
-	average := utils.CalculateAverage(times)
+	average := CalculateAverage(times)
 
-	deviation := utils.CalculateDeviation(times, average, count)
+	deviation := CalculateDeviation(times, average, count)
 
-	bestWin, averageWin := utils.CalculateBestWinAndAverageWin(entrantData, results)
+	bestWin, averageWin := CalculateBestWinAndAverageWin(entrantData, results)
 
-	worstLoss := utils.CalculateWorstLoss(entrantData, results)
+	worstLoss := CalculateWorstLoss(entrantData, results)
 
 	//TODO: Determine if we even need to return the "full raw data". Users can just get that from racetime lol
 	return domain.StatisticsResponse{
-		Average:     utils.ParseSecondsToTime(average),
-		Deviation:   utils.ParseSecondsToTime(int(deviation)),
-		BestWin:     utils.ParseSecondsToTime(bestWin),
-		WorstLoss:   utils.ParseSecondsToTime(worstLoss),
-		AverageWin:  utils.ParseSecondsToTime(averageWin),
+		Average:     ParseSecondsToTime(average),
+		Deviation:   ParseSecondsToTime(int(deviation)),
+		BestWin:     ParseSecondsToTime(bestWin),
+		WorstLoss:   ParseSecondsToTime(worstLoss),
+		AverageWin:  ParseSecondsToTime(averageWin),
 		RaceNumber:  count,
 		DnfCount:    dnfCount,
 		RawData:     entrantData,

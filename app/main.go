@@ -10,8 +10,8 @@ import (
 
 	"github.com/abadami/randomizer-statistics/internal/repositories/postgres"
 	"github.com/abadami/randomizer-statistics/internal/repositories/racetime"
+	"github.com/abadami/randomizer-statistics/internal/rest"
 	racetime_service "github.com/abadami/randomizer-statistics/racetime"
-	"github.com/abadami/randomizer-statistics/rest"
 	"github.com/abadami/randomizer-statistics/statistics"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"

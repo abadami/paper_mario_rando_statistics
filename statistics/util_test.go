@@ -1,10 +1,10 @@
-package utils
+package statistics
 
 import "testing"
 
 func TestCalculateDeviation(t *testing.T) {
 	count := 8
-	
+
 	values := make([]int, count)
 
 	values[0] = 2
@@ -17,7 +17,7 @@ func TestCalculateDeviation(t *testing.T) {
 	values[7] = 9
 
 	average := 5
-	
+
 	ans := CalculateDeviation(values, average, count)
 
 	if ans != 2.0 {
