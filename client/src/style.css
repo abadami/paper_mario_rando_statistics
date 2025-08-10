@@ -27,17 +27,20 @@ a:hover {
   color: #535bf2;
 }
 
+main {
+  width: 100%;
+}
+
 body {
   margin: 0;
   display: flex;
-  /*place-items: center;*/
-  min-width: 320px;
   min-height: 100vh;
 }
 
 h1 {
   font-size: 36px;
   line-height: 1.1;
+  text-align: center;
 }
 
 #app {
@@ -81,6 +84,7 @@ button:focus-visible {
 #filter-selectors {
   display: flex;
   gap: 8px;
+  justify-content: center;
 }
 
 .filter-container {
