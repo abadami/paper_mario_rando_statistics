@@ -144,7 +144,7 @@ import { useStatisticsData } from "./composables/useStatistics";
 import StatisticCard from "./components/StatisticCard.vue";
 import RawDataTable from "./components/RawDataTable.vue";
 import type { Filter } from "./types";
-import { API_CONFIG, RACE_TYPE_OPTIONS } from "./config";
+import { API_CONFIG } from "./config";
 
 // Reactive state
 const selectedEntrant = ref<number>(-1);
@@ -215,10 +215,9 @@ const showLeagueStats = computed(() => {
 });
 
 const showRawDataTable = computed(() => {
-    return (
-        selectedEntrant.value !== -1 &&
-        processedStatistics.value?.sortedRawData.length > 0
-    );
+    const sortedRawData = processedStatistics.value?.sortedRawData.length || 0;
+
+    return selectedEntrant.value !== -1 && sortedRawData > 0;
 });
 
 // Watch for initial data load and set default goal

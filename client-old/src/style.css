@@ -1,0 +1,136 @@
+@font-face {
+  font-family: "PaperMarioFont";
+  src: local("PaperMarioFont"), url("/PaperMarioFont.ttf") format("truetype");
+}
+
+:root {
+  font-family: "PaperMarioFont";
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #3283b4;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+main {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 36px;
+  line-height: 1.1;
+  text-align: center;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.card {
+  padding: 2em;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+#loading-section {
+  background-color: rgb(30, 49, 64);
+  padding: 1em;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 1px solid white;
+  border-radius: 4px;
+}
+
+#filter-selectors {
+  display: flex;
+  gap: 8px;
+  background-color: rgb(30, 49, 64);
+}
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#statistic-information {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: auto;
+  row-gap: 16px;
+  column-gap: 8px;
+  margin-top: 16px;
+}
+
+.statistic-card {
+  border: 1px solid white;
+  border-radius: 4px;
+  /*box-shadow: 0 3px 10px white;*/
+  padding: 16px;
+  background-color: rgb(30, 49, 64);
+  font-size: 18px;
+}
+
+.statistic-title {
+  margin: 0;
+  padding: 0;
+}
+
+#statistic-raw-data-table {
+  width: 1250px;
+  grid-column: span 3;
+  background-color: rgb(30, 49, 64);
+  border-radius: 4px;
+  padding: 16px;
+  font-size: 18px;
+  border: 1px solid white;
+  border-radius: 4px;
+}
+
+.hide {
+  /* Absolutely disgusting, will remove */
+  display: none !important;
+}

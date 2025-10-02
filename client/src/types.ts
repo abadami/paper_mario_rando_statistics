@@ -43,3 +43,8 @@ export interface CategoryDetails {
   streaming_required: boolean;
   goals: string[];
 }
+
+export interface Filter {
+  filter: string;
+  value: string | number;
+}

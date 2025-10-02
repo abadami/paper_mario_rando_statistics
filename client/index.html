@@ -1,86 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PM64R Statistics</title>
-  </head>
-  <body>
-    <main id="app">
-      <h1>Paper Mario 64 Randomizer Race Statistics</h1>
-      <fieldset id="filter-selectors">
-        <legend>Statistics Filters</legend>
-        <div class="filter-container">
-          <label for="user-selector">Racer</label>
-          <select
-            class="selection-filter"
-            id="user-selector"
-            autocomplete="racetime-username"
-          ></select>
-        </div>
-        <div class="filter-container">
-          <label for="category-selector">Race Goal</label>
-          <select
-            class="selection-filter"
-            id="category-selector"
-            autocomplete="racetime-goal"
-          ></select>
-        </div>
-        <div class="filter-container">
-          <label for="race-type-selector">Racer Number</label>
-          <select
-            class="selection-filter"
-            id="race-type-selector"
-            autocomplete="race-types"
-          >
-            <option value="">All</option>
-            <option value="league">League (1v1)</option>
-            <option value="community">Community (More than 2 racers)</option>
-          </select>
-        </div>
-      </fieldset>
-      <div id="loading-section">
-        <p>Loading...</p>
-      </div>
-      <div class="hide" id="statistic-information">
-        <div class="statistic-card" id="average">
-          <h2 class="statistic-title">Average</h2>
-          <span class="statistic-value" id="average-value">00:00:00</span>
-        </div>
-        <div class="statistic-card" id="standard-deviation">
-          <h2 class="statistic-title">Standard Deviation</h2>
-          <span class="statistic-value" id="deviation-value">00:00:00</span>
-        </div>
-        <div class="statistic-card hide" id="average-win">
-          <h2 class="statistic-title">Average Win</h2>
-          <span class="statistic-value" id="average-win-value">00:00:00</span>
-        </div>
-        <div class="statistic-card hide" id="best-win">
-          <h2 class="statistic-title">Best Win</h2>
-          <span class="statistic-value" id="best-win-value">00:00:00</span>
-        </div>
-        <div class="statistic-card hide" id="worse-loss">
-          <h2 class="statistic-title">Worse Loss</h2>
-          <span class="statistic-value" id="worse-loss-value">00:00:00</span>
-        </div>
-        <table
-          class="hide"
-          id="statistic-raw-data-table"
-          caption="Racer's Raw Data"
-        >
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Race Name</th>
-              <th>Place</th>
-              <th>Finish Time</th>
-            </tr>
-          </thead>
-          <tbody id="statistics-raw-data"></tbody>
-        </table>
-      </div>
-    </main>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.jpg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PM64R Statistics</title>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
 </html>
