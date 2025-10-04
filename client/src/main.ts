@@ -2,12 +2,12 @@ import { createApp } from "vue";
 import { VueQueryPlugin } from "@tanstack/vue-query";
 import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
-import Dropdown from "primevue/dropdown";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import ProgressSpinner from "primevue/progressspinner";
 import "./style.css";
 import App from "./App.vue";
+import { Select } from "primevue";
 
 const app = createApp(App);
 
@@ -53,7 +53,7 @@ app.use(PrimeVue, {
 });
 
 // Register PrimeVue components globally
-app.component("Dropdown", Dropdown);
+app.component("Dropdown", Select);
 app.component("DataTable", DataTable);
 app.component("Column", Column);
 app.component("ProgressSpinner", ProgressSpinner);
