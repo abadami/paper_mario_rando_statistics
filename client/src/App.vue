@@ -111,7 +111,7 @@
 
                     <!-- Best Win Card -->
                     <StatisticCard
-                        title="Best Win"
+                        title="Closest Win"
                         :value="processedStatistics.bestWin"
                         :show="showLeagueStats"
                     />
@@ -149,11 +149,11 @@ import { API_CONFIG } from "./config";
 // Reactive state
 const selectedEntrant = ref<number>(-1);
 const selectedGoal = ref<string>(API_CONFIG.DEFAULT_GOAL);
-const selectedRaceType = ref<string>("");
+const selectedRaceType = ref<string>("all");
 
 // Race type options
 const raceTypeOptions = [
-    { label: "All", value: "" },
+    { label: "All", value: "all" },
     { label: "League (1v1)", value: "league" },
     { label: "Community (More than 2 racers)", value: "community" },
 ];
@@ -190,7 +190,7 @@ const statisticsFilters = computed<Filter[]>(() => {
         filters.push({ filter: "Goal", value: selectedGoal.value });
     }
 
-    if (selectedRaceType.value) {
+    if (selectedRaceType.value !== "all") {
         filters.push({ filter: "RaceType", value: selectedRaceType.value });
     }
 
