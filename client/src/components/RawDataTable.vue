@@ -14,9 +14,9 @@
         <DataTable
             v-else
             :value="data"
-            :rows="10"
-            :paginator="data.length > 10"
-            :rowsPerPageOptions="[10, 20, 50]"
+            :rows="20"
+            :paginator="data.length > 20"
+            :rowsPerPageOptions="[20, 50, 100]"
             class="p-datatable-sm"
             :pt="{
                 root: 'bg-pm-dark',
