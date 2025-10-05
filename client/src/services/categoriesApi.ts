@@ -1,12 +1,17 @@
 import type { CategoryDetails } from "../types";
+import { API_CONFIG } from "../config";
 
 export async function fetchCategoryData(): Promise<CategoryDetails> {
   try {
-    const response = await fetch("https://racetime.gg/pm64r/data");
+    const response = await fetch(API_CONFIG.ENDPOINTS.CATEGORY_DATA);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch category data");
+    }
 
     return response.json();
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching category data:", error);
     return {
       name: "",
       short_name: "",
@@ -23,11 +28,10 @@ export async function fetchCategoryData(): Promise<CategoryDetails> {
 
 export async function fetchCategoryGoals(): Promise<string[]> {
   try {
-    const categoryData: CategoryDetails = await fetchCategoryData();
-
+    const categoryData = await fetchCategoryData();
     return categoryData.goals;
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching category goals:", error);
     return [];
   }
 }

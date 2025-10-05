@@ -1,136 +1,216 @@
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
 @font-face {
-  font-family: "PaperMarioFont";
-  src: local("PaperMarioFont"), url("/PaperMarioFont.ttf") format("truetype");
+    font-family: "PaperMarioFont";
+    src:
+        local("PaperMarioFont"),
+        url("/PaperMarioFont.ttf") format("truetype");
 }
 
 :root {
-  font-family: "PaperMarioFont";
-  line-height: 1.5;
-  font-weight: 400;
+    font-family:
+        "PaperMarioFont", system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #3283b4;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #3283b4;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-main {
-  width: 100%;
+* {
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 36px;
-  line-height: 1.1;
-  text-align: center;
-}
-
-h2 {
-  font-size: 24px;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #3283b4;
 }
 
 #app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+    min-height: 100vh;
 }
 
-.card {
-  padding: 2em;
+/* PrimeVue Dropdown Styling */
+.p-dropdown {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #333;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.p-dropdown:not(.p-disabled):hover {
+    border-color: #3283b4;
 }
 
-#loading-section {
-  background-color: rgb(30, 49, 64);
-  padding: 1em;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  border: 1px solid white;
-  border-radius: 4px;
+.p-dropdown:not(.p-disabled).p-focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem rgba(50, 131, 180, 0.2);
+    border-color: #3283b4;
 }
 
-#filter-selectors {
-  display: flex;
-  gap: 8px;
-  background-color: rgb(30, 49, 64);
+.p-dropdown .p-dropdown-label {
+    color: #333;
+    padding: 0.75rem;
 }
 
-.filter-container {
-  display: flex;
-  flex-direction: column;
+.p-dropdown .p-dropdown-trigger {
+    color: #666;
 }
 
-#statistic-information {
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
-  grid-template-rows: auto;
-  row-gap: 16px;
-  column-gap: 8px;
-  margin-top: 16px;
+.p-dropdown-panel {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 
-.statistic-card {
-  border: 1px solid white;
-  border-radius: 4px;
-  /*box-shadow: 0 3px 10px white;*/
-  padding: 16px;
-  background-color: rgb(30, 49, 64);
-  font-size: 18px;
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    color: #333;
+    padding: 0.75rem;
+    border: 0 none;
 }
 
-.statistic-title {
-  margin: 0;
-  padding: 0;
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover {
+    background-color: #f4f4f4;
 }
 
-#statistic-raw-data-table {
-  width: 1250px;
-  grid-column: span 3;
-  background-color: rgb(30, 49, 64);
-  border-radius: 4px;
-  padding: 16px;
-  font-size: 18px;
-  border: 1px solid white;
-  border-radius: 4px;
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 0.15rem rgba(50, 131, 180, 0.2);
+    background-color: #f4f4f4;
 }
 
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    background-color: #3283b4;
+    color: white;
+}
+
+/* Loading Spinner */
+.p-progress-spinner {
+    color: white;
+}
+
+.p-progress-spinner .p-progress-spinner-circle {
+    stroke: currentColor;
+}
+
+/* DataTable Styling */
+.p-datatable .p-datatable-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+    padding: 1rem;
+    font-weight: 600;
+    color: white;
+    background-color: rgb(30, 49, 64);
+    border: 1px solid white;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+    text-align: left;
+    border: 1px solid #555;
+    padding: 1rem;
+    background-color: rgb(30, 49, 64);
+    color: white;
+}
+
+.p-datatable .p-datatable-tbody > tr:nth-child(even) > td {
+    background-color: rgb(25, 44, 59);
+}
+
+.p-datatable .p-datatable-tbody > tr:hover > td {
+    background-color: rgb(35, 54, 69);
+}
+
+/* Paginator */
+.p-paginator {
+    background-color: rgb(30, 49, 64);
+    color: white;
+    border: none;
+    padding: 1rem;
+    justify-content: center;
+}
+
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    min-width: 3rem;
+    height: 3rem;
+    margin: 0 0.125rem;
+    border-radius: 4px;
+}
+
+.p-paginator .p-paginator-first:not(.p-disabled):hover,
+.p-paginator .p-paginator-prev:not(.p-disabled):hover,
+.p-paginator .p-paginator-next:not(.p-disabled):hover,
+.p-paginator .p-paginator-last:not(.p-disabled):hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+    min-width: 3rem;
+    height: 3rem;
+    margin: 0 0.125rem;
+    border-radius: 4px;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background-color: #3283b4;
+    border-color: #3283b4;
+    color: white;
+}
+
+.p-paginator .p-dropdown {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+/* Custom Paper Mario colors */
+.bg-pm-blue {
+    background-color: #3283b4;
+}
+
+.bg-pm-dark {
+    background-color: rgb(30, 49, 64);
+}
+
+/* Links */
+a {
+    color: #646cff;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #535bf2;
+    text-decoration: underline;
+}
+
+/* Utility classes */
 .hide {
-  /* Absolutely disgusting, will remove */
-  display: none !important;
+    display: none !important;
 }
