@@ -1,5 +1,7 @@
 ## Paper Mario 64 Randomizer Race Statistics
 
+THIS PROJECT HAS BEEN MOVED TO CODEBERG: [LINK](https://codeberg.org/SalamiTsunami/pm64r_statistics)
+
 A web server with a simple web page attached that collects data from racetime.gg (specifically paper mario 64 randomizer races) and gives specific race statistics and raw data for specific racers when queried.
 
 ### Quick Start
